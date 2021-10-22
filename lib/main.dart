@@ -8,6 +8,8 @@ void main() async {
   runApp(const MyApp());
 }
 
+// this is a test comment
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
