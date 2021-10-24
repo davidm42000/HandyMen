@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:handy_men/screens/wrapper.dart';
+import 'package:handy_men/screens/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
@@ -8,8 +8,6 @@ void main() async {
   runApp(const MyApp());
 }
 
-// this is a test comment
-
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -17,7 +15,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Wrapper(),
+      debugShowCheckedModeBanner: false,
+      home: LoginPage(),
     );
   }
 }
