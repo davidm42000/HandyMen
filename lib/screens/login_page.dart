@@ -22,6 +22,8 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _isProcessing = false;
 
+  String error = '';
+
   Future<FirebaseApp> _initializeFirebase() async {
     FirebaseApp firebaseApp = await Firebase.initializeApp();
 
@@ -50,6 +52,7 @@ class _LoginPageState extends State<LoginPage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text('Firebase Authentication'),
+          backgroundColor: Colors.orange,
         ),
         body: FutureBuilder(
           future: _initializeFirebase(),
@@ -146,9 +149,15 @@ class _LoginPageState extends State<LoginPage> {
                                                         ProfilePage(user: user),
                                                   ),
                                                 );
+                                              } else {
+                                                setState(() {
+                                                  error =
+                                                      'could not sign in with those credentials';
+                                                });
                                               }
                                             }
                                           },
+                                          style: ElevatedButton.styleFrom(),
                                           child: Text(
                                             'Sign In',
                                             style:
@@ -167,6 +176,7 @@ class _LoginPageState extends State<LoginPage> {
                                               ),
                                             );
                                           },
+                                          style: ElevatedButton.styleFrom(),
                                           child: Text(
                                             'Register',
                                             style:
@@ -175,7 +185,13 @@ class _LoginPageState extends State<LoginPage> {
                                         ),
                                       ),
                                     ],
-                                  )
+                                  ),
+                            SizedBox(height: 12.0),
+                            Text(
+                              error,
+                              style:
+                                  TextStyle(color: Colors.red, fontSize: 14.0),
+                            ),
                           ],
                         ),
                       )

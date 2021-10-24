@@ -6,6 +6,9 @@ class Validator {
     if (name.isEmpty) {
       return 'Name can\'t be empty';
     }
+    if (name.length > 30) {
+      return 'Name is too Long';
+    }
 
     return null;
   }
