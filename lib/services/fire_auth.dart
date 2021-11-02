@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:handy_men/services/database.dart';
 
 class FireAuth {
   // For registering a new user
@@ -28,6 +29,12 @@ class FireAuth {
       }
     } catch (e) {
       print(e);
+    }
+
+    // create a new document for the user with the uid
+    if (user != null) {
+      await DatabaseService(uid: user.uid)
+          .updateNormalUserData(user.displayName, '');
     }
 
     return user;

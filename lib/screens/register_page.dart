@@ -108,13 +108,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                           _isProcessing = true;
                                         });
 
-                                        await Future.delayed(
-                                            Duration(seconds: 5));
-
-                                        setState(() {
-                                          _isProcessing = false;
-                                        });
-
                                         if (_registerFormKey.currentState!
                                             .validate()) {
                                           User? user = await FireAuth
