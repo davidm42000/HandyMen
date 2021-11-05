@@ -9,12 +9,16 @@ class DatabaseService {
   final CollectionReference normalUserCollection =
       FirebaseFirestore.instance.collection('normalUsers');
   final CollectionReference tradesmanCollection =
-      FirebaseFirestore.instance.collection('Tradesmen');
+      FirebaseFirestore.instance.collection('tradesmen');
 
   Future updateNormalUserData(String? name, String address) async {
     return await normalUserCollection.doc(uid).set({
       'name': name,
       'address': address,
     });
+  }
+
+  Stream<QuerySnapshot> get tradesmen {
+    return tradesmanCollection.snapshots();
   }
 }

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:handy_men/screens/home_page.dart';
 import 'package:handy_men/screens/profile_page.dart';
 import 'package:handy_men/screens/register_page.dart';
 import 'package:handy_men/services/fire_auth.dart';
@@ -32,10 +33,9 @@ class _LoginPageState extends State<LoginPage> {
     if (user != null) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => ProfilePage(
-            user: user,
-          ),
-        ),
+            builder: (context) => HomePage(
+                  user: user,
+                )),
       );
     }
 
