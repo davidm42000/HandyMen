@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:handy_men/models/tradesman_model.dart';
-import 'package:handy_men/screens/tradesmen_list.dart';
+import 'package:handy_men/templates/tradesmen_list.dart';
 import 'package:handy_men/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

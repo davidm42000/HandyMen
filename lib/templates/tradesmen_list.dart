@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:handy_men/models/tradesman_model.dart';
+import 'package:handy_men/templates/tradesman_tile.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -19,6 +20,11 @@ class _TradesmenListState extends State<TradesmenList> {
       print(tradesman.name);
     });
 
-    return Container();
+    return ListView.builder(
+      itemCount: tradesmen.length,
+      itemBuilder: (context, index) {
+        return TradesmanTile(tradesman: tradesmen[index]);
+      },
+    );
   }
 }

@@ -1,5 +1,5 @@
 class Tradesman {
-  final String? name;
+  final String name;
 
-  Tradesman({this.name});
+  Tradesman({ required this.name});
 }
