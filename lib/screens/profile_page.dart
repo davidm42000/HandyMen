@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:handy_men/screens/login_page.dart';
 import 'package:handy_men/services/fire_auth.dart';
+import 'package:handy_men/templates/bottom_bar.dart';
 
 class ProfilePage extends StatefulWidget {
   final User user;
@@ -121,6 +122,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ],
         ),
       ),
+      bottomNavigationBar: BottomBar(user: _currentUser),
     );
   }
 }
