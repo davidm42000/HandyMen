@@ -1,11 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:handy_men/models/tradesman_model.dart';
 import 'package:handy_men/screens/home_page.dart';
 import 'package:handy_men/screens/profile_page.dart';
 import 'package:handy_men/screens/register_page.dart';
 import 'package:handy_men/services/fire_auth.dart';
 import 'package:handy_men/services/validator.dart';
+import 'package:provider/provider.dart';
+import 'package:handy_men/services/database.dart';
 
 class LoginPage extends StatefulWidget {
   @override

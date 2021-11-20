@@ -11,6 +11,12 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('normalUsers');
   final CollectionReference tradesmanCollection =
       FirebaseFirestore.instance.collection('tradesmen');
+  final CollectionReference userCollection =
+      FirebaseFirestore.instance.collection('userData');
+
+  // Query q = FirebaseFirestore.instance
+  //     .collection('tradesmen')
+  //     .where('name', isEqualTo: 'Jims');
 
   Future updateNormalUserData(String? name, String? address) async {
     return await normalUserCollection.doc(uid).set({
@@ -25,6 +31,7 @@ class DatabaseService {
       return snapshot.docs.map((doc) {
         return Tradesman(
           name: doc.get('name') ?? "",
+          id: doc.get('id') ?? "",
         );
       }).toList();
     } catch (e) {

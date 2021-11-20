@@ -1,7 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:handy_men/services/database.dart';
 
 class FireAuth {
+  // final CollectionReference normalUserCollection =
+  //     FirebaseFirestore.instance.collection('normalUsers');
+
   // For registering a new user
   static Future<User?> registerUsingEmailPassword({
     required String name,

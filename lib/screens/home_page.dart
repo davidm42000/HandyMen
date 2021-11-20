@@ -23,6 +23,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final Stream<QuerySnapshot> _tradesmanStream =
+      FirebaseFirestore.instance.collection('tradesmen').snapshots();
+
   late User _currentUser;
 
   @override
@@ -44,24 +47,44 @@ class _HomePageState extends State<HomePage> {
           });
     }
 
-    return StreamProvider<List<Tradesman>>.value(
-      initialData: [],
-      value: DatabaseService().tradesmen,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Home Page'),
-          backgroundColor: Colors.orange,
-          actions: <Widget>[
-            FlatButton.icon(
-              icon: Icon(Icons.settings),
-              label: Text('settings'),
-              onPressed: () => _showSettingsPanel(),
-            ),
-          ],
-        ),
-        body: TradesmenList(),
-        bottomNavigationBar: BottomBar(user: _currentUser),
+    // return MultiProvider(
+    //   providers: [
+    //     StreamProvider<List<Tradesman>>.value(
+    //       initialData: [],
+    //       value: DatabaseService().tradesmen,
+    //     ),
+    //   ],
+    //   child: Scaffold(
+    //     appBar: AppBar(
+    //       title: Text('Home Page'),
+    //       backgroundColor: Colors.orange,
+    //       actions: <Widget>[
+    //         FlatButton.icon(
+    //           icon: Icon(Icons.settings),
+    //           label: Text('settings'),
+    //           onPressed: () => _showSettingsPanel(),
+    //         ),
+    //       ],
+    //     ),
+    //     body: TradesmenList(),
+    //     bottomNavigationBar: BottomBar(user: _currentUser),
+    //   ),
+    // );
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Home Page'),
+        backgroundColor: Colors.orange,
+        actions: <Widget>[
+          FlatButton.icon(
+            icon: Icon(Icons.settings),
+            label: Text('settings'),
+            onPressed: () => _showSettingsPanel(),
+          ),
+        ],
       ),
+      body: TradesmenList(),
+      bottomNavigationBar: BottomBar(user: _currentUser),
     );
   }
 }
