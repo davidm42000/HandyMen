@@ -1,17 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:handy_men/screens/home_page.dart';
-import 'package:handy_men/screens/profile_page.dart';
+import 'package:handy_men/screens/normal_user_home_page.dart';
+import 'package:handy_men/screens/normal_user_profile_page.dart';
 
-class BottomBar extends StatefulWidget {
+class NormalUserBottomBar extends StatefulWidget {
   final User user;
-  const BottomBar({required this.user, Key? key}) : super(key: key);
+  const NormalUserBottomBar({required this.user, Key? key}) : super(key: key);
 
   @override
-  _BottomBarState createState() => _BottomBarState();
+  _NormalUserBottomBarState createState() => _NormalUserBottomBarState();
 }
 
-class _BottomBarState extends State<BottomBar> {
+class _NormalUserBottomBarState extends State<NormalUserBottomBar> {
   late User _currentUser;
 
   @override
@@ -32,7 +32,8 @@ class _BottomBarState extends State<BottomBar> {
               setState(() {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (context) => ProfilePage(user: _currentUser),
+                    builder: (context) =>
+                        NormalUserProfilePage(user: _currentUser),
                   ),
                 );
               });
@@ -45,7 +46,8 @@ class _BottomBarState extends State<BottomBar> {
               setState(() {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (context) => HomePage(user: _currentUser),
+                    builder: (context) =>
+                        NormalUserHomePage(user: _currentUser),
                   ),
                 );
               });
@@ -55,7 +57,7 @@ class _BottomBarState extends State<BottomBar> {
           ),
           FlatButton.icon(
             onPressed: () {},
-            icon: Icon(Icons.person),
+            icon: Icon(Icons.mail),
             label: Padding(padding: EdgeInsets.all(0)),
           ),
         ],

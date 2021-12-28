@@ -26,21 +26,21 @@ class DatabaseService {
   }
 
   // tradesmen list from snapshot
-  List<Tradesman> _tradesmenListFromSnapshot(QuerySnapshot snapshot) {
-    try {
-      return snapshot.docs.map((doc) {
-        return Tradesman(
-          name: doc.get('name') ?? "",
-          id: doc.get('id') ?? "",
-        );
-      }).toList();
-    } catch (e) {
-      print(e.toString());
-      return [];
-    }
-  }
+  // List<Tradesman> _tradesmenListFromSnapshot(QuerySnapshot snapshot) {
+  //   try {
+  //     return snapshot.docs.map((doc) {
+  //       return Tradesman(
+  //         name: doc.get('name') ?? "",
+  //         id: doc.get('id') ?? "",
+  //       );
+  //     }).toList();
+  //   } catch (e) {
+  //     print(e.toString());
+  //     return [];
+  //   }
+  // }
 
-  Stream<List<Tradesman>> get tradesmen {
-    return tradesmanCollection.snapshots().map(_tradesmenListFromSnapshot);
-  }
+  // Stream<List<Tradesman>> get tradesmen {
+  //   return tradesmanCollection.snapshots().map(_tradesmenListFromSnapshot);
+  // }
 }

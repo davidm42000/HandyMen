@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:handy_men/screens/profile_page.dart';
+import 'package:handy_men/screens/normal_user_home_page.dart';
+import 'package:handy_men/screens/normal_user_profile_page.dart';
+import 'package:handy_men/screens/tradesmen_profile_page.dart';
 import 'package:handy_men/services/fire_auth.dart';
 import 'package:handy_men/services/validator.dart';
 
@@ -21,6 +24,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final _focusPassword = FocusNode();
 
   bool _isProcessing = false;
+
+  bool _isTrademan = false;
 
   @override
   Widget build(BuildContext context) {
@@ -123,14 +128,40 @@ class _RegisterPageState extends State<RegisterPage> {
                                           });
 
                                           if (user != null) {
-                                            Navigator.of(context)
-                                                .pushAndRemoveUntil(
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ProfilePage(user: user),
-                                              ),
-                                              ModalRoute.withName('/'),
-                                            );
+                                            FirebaseFirestore.instance
+                                                .collection('tradesmen')
+                                                .doc(user.uid)
+                                                .get()
+                                                .then((DocumentSnapshot
+                                                    documentSnapshot) {
+                                              if (documentSnapshot.exists) {
+                                                print(
+                                                    'Document exists on the database');
+                                                setState(() {
+                                                  _isTrademan = true;
+                                                });
+                                              }
+                                            });
+
+                                            if (_isTrademan == true) {
+                                              Navigator.of(context)
+                                                  .pushReplacement(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        TrademenProfilePage(
+                                                          user: user,
+                                                        )),
+                                              );
+                                            } else {
+                                              Navigator.of(context)
+                                                  .pushReplacement(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        NormalUserHomePage(
+                                                          user: user,
+                                                        )),
+                                              );
+                                            }
                                           }
                                         }
                                       },

@@ -2,18 +2,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:handy_men/screens/login_page.dart';
 import 'package:handy_men/services/fire_auth.dart';
-import 'package:handy_men/templates/bottom_bar.dart';
+import 'package:handy_men/templates/normal_user_bottom_bar.dart';
 
-class ProfilePage extends StatefulWidget {
+class NormalUserProfilePage extends StatefulWidget {
   final User user;
 
-  const ProfilePage({required this.user});
+  const NormalUserProfilePage({required this.user});
 
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  _NormalUserProfilePageState createState() => _NormalUserProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _NormalUserProfilePageState extends State<NormalUserProfilePage> {
   bool _isSendingVerification = false;
   bool _isSigningOut = false;
 
@@ -122,7 +122,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomBar(user: _currentUser),
+      bottomNavigationBar: NormalUserBottomBar(user: _currentUser),
     );
   }
 }

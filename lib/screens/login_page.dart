@@ -3,9 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:handy_men/models/tradesman_model.dart';
-import 'package:handy_men/screens/home_page.dart';
-import 'package:handy_men/screens/profile_page.dart';
+import 'package:handy_men/screens/normal_user_home_page.dart';
+import 'package:handy_men/screens/normal_user_profile_page.dart';
 import 'package:handy_men/screens/register_page.dart';
+import 'package:handy_men/screens/tradesmen_profile_page.dart';
 import 'package:handy_men/services/fire_auth.dart';
 import 'package:handy_men/services/validator.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +28,8 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _isProcessing = false;
 
+  bool _isTrademan = false;
+
   String error = '';
 
   Future<FirebaseApp> _initializeFirebase() async {
@@ -35,12 +38,36 @@ class _LoginPageState extends State<LoginPage> {
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-            builder: (context) => HomePage(
-                  user: user,
-                )),
-      );
+      FirebaseFirestore.instance
+          .collection('tradesmen')
+          .doc(user.uid)
+          .get()
+          .then((DocumentSnapshot documentSnapshot) {
+        if (documentSnapshot.exists) {
+          print('Document exists on the database');
+          if (_isTrademan != true) {
+            setState(() {
+              _isTrademan = true;
+            });
+          }
+        }
+      });
+
+      if (_isTrademan == true) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+              builder: (context) => TrademenProfilePage(
+                    user: user,
+                  )),
+        );
+      } else {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+              builder: (context) => NormalUserHomePage(
+                    user: user,
+                  )),
+        );
+      }
     }
 
     return firebaseApp;
@@ -146,13 +173,40 @@ class _LoginPageState extends State<LoginPage> {
                                               });
 
                                               if (user != null) {
-                                                Navigator.of(context)
-                                                    .pushReplacement(
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ProfilePage(user: user),
-                                                  ),
-                                                );
+                                                FirebaseFirestore.instance
+                                                    .collection('tradesmen')
+                                                    .doc(user.uid)
+                                                    .get()
+                                                    .then((DocumentSnapshot
+                                                        documentSnapshot) {
+                                                  if (documentSnapshot.exists) {
+                                                    print(
+                                                        'Document exists on the database');
+                                                    setState(() {
+                                                      _isTrademan = true;
+                                                    });
+                                                  }
+                                                });
+
+                                                if (_isTrademan == true) {
+                                                  Navigator.of(context)
+                                                      .pushReplacement(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            TrademenProfilePage(
+                                                              user: user,
+                                                            )),
+                                                  );
+                                                } else {
+                                                  Navigator.of(context)
+                                                      .pushReplacement(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            NormalUserHomePage(
+                                                              user: user,
+                                                            )),
+                                                  );
+                                                }
                                               } else {
                                                 setState(() {
                                                   error =

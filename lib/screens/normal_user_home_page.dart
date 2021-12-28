@@ -2,27 +2,27 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:handy_men/models/tradesman_model.dart';
-import 'package:handy_men/screens/profile_page.dart';
+import 'package:handy_men/screens/normal_user_profile_page.dart';
 import 'package:handy_men/services/fire_auth.dart';
-import 'package:handy_men/templates/bottom_bar.dart';
+import 'package:handy_men/templates/normal_user_bottom_bar.dart';
 import 'package:handy_men/templates/tradesmen_list.dart';
 import 'package:handy_men/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class HomePage extends StatefulWidget {
+class NormalUserHomePage extends StatefulWidget {
   final User user;
 
-  const HomePage({
+  const NormalUserHomePage({
     required this.user,
     Key? key,
   }) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _NormalUserHomePageState createState() => _NormalUserHomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _NormalUserHomePageState extends State<NormalUserHomePage> {
   final Stream<QuerySnapshot> _tradesmanStream =
       FirebaseFirestore.instance.collection('tradesmen').snapshots();
 
@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: TradesmenList(),
-      bottomNavigationBar: BottomBar(user: _currentUser),
+      bottomNavigationBar: NormalUserBottomBar(user: _currentUser),
     );
   }
 }
