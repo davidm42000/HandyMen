@@ -38,6 +38,8 @@ dependencies:
   firebase_core: ^1.8.0
   cloud_firestore: ^2.5.3
   provider: ^6.0.1
+  location: ^4.3.0
+  geocoding: ^2.0.1
 
 dev_dependencies:
   flutter_test:
