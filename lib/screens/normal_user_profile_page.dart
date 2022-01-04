@@ -1,11 +1,12 @@
-import 'dart:ffi';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:handy_men/screens/login_page.dart';
 import 'package:handy_men/services/fire_auth.dart';
 import 'package:handy_men/templates/normal_user_bottom_bar.dart';
-import 'package:location/location.dart';
+import 'package:location/location.dart' as loc;
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
 class NormalUserProfilePage extends StatefulWidget {
   final User user;
@@ -22,7 +23,7 @@ class _NormalUserProfilePageState extends State<NormalUserProfilePage> {
 
   late User _currentUser;
 
-  var location = new Location();
+  var location = new loc.Location();
   var _longitude;
   var _latitude;
 
@@ -34,7 +35,7 @@ class _NormalUserProfilePageState extends State<NormalUserProfilePage> {
     getLocation();
   }
 
-  var currentLocation;
+  var _currentAddress;
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +68,10 @@ class _NormalUserProfilePageState extends State<NormalUserProfilePage> {
             ),
             Text(
               'Latitude: ${_latitude}',
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+            Text(
+              'Current Address: ${_currentAddress}',
               style: Theme.of(context).textTheme.bodyText1,
             ),
             SizedBox(height: 16.0),
@@ -161,9 +166,9 @@ class _NormalUserProfilePageState extends State<NormalUserProfilePage> {
     }
 
     var _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
+    if (_permissionGranted == loc.PermissionStatus.denied) {
       _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
+      if (_permissionGranted != loc.PermissionStatus.granted) {
         return;
       }
     }
@@ -172,9 +177,15 @@ class _NormalUserProfilePageState extends State<NormalUserProfilePage> {
   getLocation() async {
     var _currentLocation = await location.getLocation();
     print(_currentLocation.longitude);
+    double _lat = _currentLocation.latitude as double;
+    double _long = _currentLocation.longitude as double;
+    List<Placemark> placemarks = await placemarkFromCoordinates(_lat, _long);
+    Placemark place = placemarks[0];
     setState(() {
       _longitude = _currentLocation.longitude;
       _latitude = _currentLocation.latitude;
+      _currentAddress =
+          "${place.locality}, ${place.name}, ${place.postalCode}, ${place.country}}";
     });
   }
 }
