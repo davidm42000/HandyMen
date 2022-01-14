@@ -83,7 +83,9 @@ class _NormalUserHomePageState extends State<NormalUserHomePage> {
           ),
         ],
       ),
-      body: TradesmenList(),
+      body: TradesmenList(
+        distance: 12.00,
+      ),
       bottomNavigationBar: NormalUserBottomBar(user: _currentUser),
     );
   }
