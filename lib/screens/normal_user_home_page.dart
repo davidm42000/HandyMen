@@ -13,10 +13,16 @@ import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NormalUserHomePage extends StatefulWidget {
+  final String selectedDistance;
+  final String selectedTrade;
+  final double distance;
   final User user;
 
   const NormalUserHomePage({
     required this.user,
+    required this.selectedDistance,
+    required this.selectedTrade,
+    required this.distance,
     Key? key,
   }) : super(key: key);
 
@@ -28,16 +34,20 @@ class _NormalUserHomePageState extends State<NormalUserHomePage> {
   final Stream<QuerySnapshot> _tradesmanStream =
       FirebaseFirestore.instance.collection('tradesmen').snapshots();
 
+  late String _selectedDistance;
 
+  late String _selectedTrade;
 
-  String _selectedDistance = "20km";
-  double _distance = 20.0;
+  late double _distance;
 
   late User _currentUser;
 
   @override
   void initState() {
     _currentUser = widget.user;
+    _distance = widget.distance;
+    _selectedDistance = widget.selectedDistance;
+    _selectedTrade = widget.selectedTrade;
     super.initState();
   }
 
@@ -49,7 +59,11 @@ class _NormalUserHomePageState extends State<NormalUserHomePage> {
           builder: (context) {
             return Container(
               padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
-              child: SettingsForm(user: _currentUser, selectedDistance: _selectedDistance,),
+              child: SettingsForm(
+                user: _currentUser,
+                selectedDistance: _selectedDistance,
+                selectedTrade: _selectedTrade,
+              ),
             );
           });
     }
@@ -95,6 +109,7 @@ class _NormalUserHomePageState extends State<NormalUserHomePage> {
       ),
       body: TradesmenList(
         distance: _distance,
+        tradeType: _selectedTrade,
       ),
       bottomNavigationBar: NormalUserBottomBar(user: _currentUser),
     );

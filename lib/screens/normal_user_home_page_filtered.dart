@@ -14,6 +14,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NormalUserHomePageFiltered extends StatefulWidget {
   final String selectedDistance;
+  final String selectedTrade;
   final double distance;
   final User user;
 
@@ -21,6 +22,7 @@ class NormalUserHomePageFiltered extends StatefulWidget {
     required this.user,
     required this.distance,
     required this.selectedDistance,
+    required this.selectedTrade,
     Key? key,
   }) : super(key: key);
 
@@ -36,6 +38,8 @@ class _NormalUserHomePageFilteredState
 
   late String _selectedDistance;
 
+  late String _selectedTrade;
+
   late double _distance;
 
   late User _currentUser;
@@ -45,6 +49,7 @@ class _NormalUserHomePageFilteredState
     _currentUser = widget.user;
     _distance = widget.distance;
     _selectedDistance = widget.selectedDistance;
+    _selectedTrade = widget.selectedTrade;
     super.initState();
   }
 
@@ -59,11 +64,13 @@ class _NormalUserHomePageFilteredState
               child: SettingsForm(
                 user: _currentUser,
                 selectedDistance: _selectedDistance,
+                selectedTrade: _selectedTrade,
               ),
             );
           });
     }
 
+    print('Distance is: $_distance');
     return Scaffold(
       appBar: AppBar(
         title: Text('Home Page Filtered'),
@@ -81,6 +88,7 @@ class _NormalUserHomePageFilteredState
       ),
       body: TradesmenList(
         distance: _distance,
+        tradeType: _selectedTrade,
       ),
       bottomNavigationBar: NormalUserBottomBar(user: _currentUser),
     );

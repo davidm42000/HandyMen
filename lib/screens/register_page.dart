@@ -159,6 +159,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                                     builder: (context) =>
                                                         NormalUserHomePage(
                                                           user: user,
+                                                          distance: 20.0,
+                                                          selectedDistance: '20km',
+                                                          selectedTrade: 'All',
                                                         )),
                                               );
                                             }

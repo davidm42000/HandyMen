@@ -65,6 +65,9 @@ class _LoginPageState extends State<LoginPage> {
           MaterialPageRoute(
               builder: (context) => NormalUserHomePage(
                     user: user,
+                    distance: 20.0,
+                    selectedDistance: '20km',
+                    selectedTrade: 'All',
                   )),
         );
       }
@@ -204,6 +207,11 @@ class _LoginPageState extends State<LoginPage> {
                                                         builder: (context) =>
                                                             NormalUserHomePage(
                                                               user: user,
+                                                              distance: 20.0,
+                                                              selectedDistance:
+                                                                  '20km',
+                                                              selectedTrade:
+                                                                  'All',
                                                             )),
                                                   );
                                                 }

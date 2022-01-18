@@ -46,8 +46,12 @@ class _NormalUserBottomBarState extends State<NormalUserBottomBar> {
               setState(() {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (context) =>
-                        NormalUserHomePage(user: _currentUser),
+                    builder: (context) => NormalUserHomePage(
+                      user: _currentUser,
+                      distance: 20.0,
+                      selectedDistance: '20km',
+                      selectedTrade: 'All',
+                    ),
                   ),
                 );
               });

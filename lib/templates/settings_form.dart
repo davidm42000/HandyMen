@@ -6,10 +6,14 @@ import 'package:handy_men/templates/tradesmen_list.dart';
 
 class SettingsForm extends StatefulWidget {
   final String selectedDistance;
+  final String selectedTrade;
   final User user;
 
   const SettingsForm(
-      {Key? key, required this.user, required this.selectedDistance})
+      {Key? key,
+      required this.user,
+      required this.selectedDistance,
+      required this.selectedTrade})
       : super(key: key);
 
   @override
@@ -41,16 +45,17 @@ class _SettingsFormState extends State<SettingsForm> {
     return menuItems;
   }
 
-  String? _selectedTrade = "All";
   double _distance = 20.0;
 
   late String _selectedDistance;
+  late String _selectedTrade;
   late User _currentUser;
 
   @override
   void initState() {
     _currentUser = widget.user;
     _selectedDistance = widget.selectedDistance;
+    _selectedTrade = widget.selectedTrade;
     super.initState();
   }
 
@@ -87,8 +92,7 @@ class _SettingsFormState extends State<SettingsForm> {
                 String numStr = _selectedDistance.replaceAll(
                     new RegExp(r'[^0-9]'), ''); // '20'
                 double d = double.parse(numStr);
-                // this._distance = ValueNotifier(d);
-                _distance = double.parse(numStr);
+                this._distance = double.parse(numStr);
               });
             },
             items: distancesDropdownItems,
@@ -103,15 +107,16 @@ class _SettingsFormState extends State<SettingsForm> {
               style: TextStyle(color: Colors.white),
             ),
             onPressed: () async {
-              print(_selectedTrade);
-              print(_selectedDistance);
-              print(_distance);
+              print('Selected Trade $_selectedTrade');
+              print('Selected distance $_selectedDistance');
+              print('Settings distnace $_distance');
               Navigator.pop(context);
               Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => NormalUserHomePageFiltered(
+                  builder: (context) => NormalUserHomePage(
                         user: _currentUser,
                         distance: _distance,
                         selectedDistance: _selectedDistance,
+                        selectedTrade: _selectedTrade,
                       )));
             },
           ),

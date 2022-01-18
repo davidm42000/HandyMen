@@ -10,17 +10,16 @@ import 'dart:math';
 
 class TradesmenList extends StatefulWidget {
   final double distance;
-  const TradesmenList({required this.distance, Key? key}) : super(key: key);
+  final String tradeType;
+  const TradesmenList(
+      {required this.distance, required this.tradeType, Key? key})
+      : super(key: key);
 
   @override
   _TradesmenListState createState() => _TradesmenListState();
 }
 
 class _TradesmenListState extends State<TradesmenList> {
-  final Stream<QuerySnapshot> _tradesmanStream = FirebaseFirestore.instance
-      .collection('tradesmen')
-      .orderBy('location', descending: true)
-      .snapshots();
   var _example = "2km";
 
   var location = new loc.Location();
@@ -30,31 +29,40 @@ class _TradesmenListState extends State<TradesmenList> {
   var _distanceInMeters = 0.0;
 
   late double _distance;
+  late String _tradeType;
+  bool _error = false;
 
   @override
   void initState() {
     _distance = widget.distance;
+    _tradeType = widget.tradeType;
     super.initState();
     getLocation();
   }
 
+  Stream<QuerySnapshot> getStream() {
+    Stream<QuerySnapshot> tradesmanStream;
+    if (_tradeType == 'All') {
+      late Stream<QuerySnapshot> _tradesmanStream = FirebaseFirestore.instance
+          .collection('tradesmen')
+          .orderBy('location', descending: true)
+          .snapshots();
+      tradesmanStream = _tradesmanStream;
+    } else {
+      late Stream<QuerySnapshot> _tradesmanStream = FirebaseFirestore.instance
+          .collection('tradesmen')
+          .orderBy('location', descending: true)
+          .where('trade', isEqualTo: _tradeType)
+          .snapshots();
+      tradesmanStream = _tradesmanStream;
+    }
+    return tradesmanStream;
+  }
+
   @override
   Widget build(BuildContext context) {
-    // final tradesmen = Provider.of<List<Tradesman>>(context);
-
-    // tradesmen.forEach((tradesman) {
-    //   print(tradesman.name);
-    // });
-
-    // return ListView.builder(
-    //   itemCount: tradesmen.length,
-    //   itemBuilder: (context, index) {
-    //     return TradesmanTile(tradesman: tradesmen[index]);
-    //   },
-    // );
-
     return StreamBuilder<QuerySnapshot>(
-      stream: _tradesmanStream,
+      stream: getStream(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
           return Text('Something went wrong');
@@ -62,6 +70,10 @@ class _TradesmenListState extends State<TradesmenList> {
 
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Text("Loading");
+        }
+
+        if (_error == true) {
+          return Text('errorrrrrrr');
         }
 
         return ListView(
@@ -83,6 +95,7 @@ class _TradesmenListState extends State<TradesmenList> {
             print("Users latitude: ${_userLatitude}");
             print("Users longitude: ${_userLongitude}");
             if (_distanceInMeters < _distance) {
+              this._error = false;
               return Padding(
                 padding: EdgeInsets.only(top: 8.0),
                 child: Card(
@@ -103,6 +116,7 @@ class _TradesmenListState extends State<TradesmenList> {
                 ),
               );
             } else {
+              this._error = true;
               return Padding(
                 padding: EdgeInsets.only(top: 8.0),
               );

@@ -60,7 +60,7 @@ class _TradesmanHomePageState extends State<TradesmanHomePage> {
           ),
         ],
       ),
-      body: TradesmenList(distance: 12.0,),
+      body: TradesmenList(distance: 12.0, tradeType: 'Electrician',),
       bottomNavigationBar: TradesmenBottomBar(user: _currentUser),
     );
   }
