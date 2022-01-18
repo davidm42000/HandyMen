@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:handy_men/models/tradesman_model.dart';
+import 'package:handy_men/screens/tradesman_profile_page.dart';
 import 'package:handy_men/templates/tradesman_tile.dart';
 import 'package:location/location.dart' as loc;
 import 'package:provider/provider.dart';
@@ -9,10 +11,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:math';
 
 class TradesmenList extends StatefulWidget {
+  final User user;
   final double distance;
   final String tradeType;
   const TradesmenList(
-      {required this.distance, required this.tradeType, Key? key})
+      {required this.distance, required this.tradeType, required this.user, Key? key})
       : super(key: key);
 
   @override
@@ -30,12 +33,14 @@ class _TradesmenListState extends State<TradesmenList> {
 
   late double _distance;
   late String _tradeType;
+  late User _currentUser;
   bool _error = false;
 
   @override
   void initState() {
     _distance = widget.distance;
     _tradeType = widget.tradeType;
+    _currentUser = widget.user;
     super.initState();
     getLocation();
   }
@@ -109,7 +114,13 @@ class _TradesmenListState extends State<TradesmenList> {
                     subtitle: SizedBox(
                       height: 30.0,
                       child: TextButton(
-                          child: Text('View Profile'), onPressed: () async {}),
+                          child: Text('View Profile'),
+                          onPressed: () async {
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        TradesmanProfilePage(user: _currentUser,)));
+                          }),
                     ),
                     trailing: Text("${_distanceInMeters} km"),
                   ),

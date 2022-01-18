@@ -110,6 +110,7 @@ class _NormalUserHomePageState extends State<NormalUserHomePage> {
       body: TradesmenList(
         distance: _distance,
         tradeType: _selectedTrade,
+        user: _currentUser,
       ),
       bottomNavigationBar: NormalUserBottomBar(user: _currentUser),
     );

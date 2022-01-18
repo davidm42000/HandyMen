@@ -89,6 +89,7 @@ class _NormalUserHomePageFilteredState
       body: TradesmenList(
         distance: _distance,
         tradeType: _selectedTrade,
+        user: _currentUser,
       ),
       bottomNavigationBar: NormalUserBottomBar(user: _currentUser),
     );
