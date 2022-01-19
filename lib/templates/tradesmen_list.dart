@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:handy_men/models/tradesman_model.dart';
+import 'package:handy_men/screens/tradesman_edit_profile_page.dart';
 import 'package:handy_men/screens/tradesman_profile_page.dart';
 import 'package:handy_men/templates/tradesman_tile.dart';
 import 'package:location/location.dart' as loc;
@@ -119,7 +120,7 @@ class _TradesmenListState extends State<TradesmenList> {
                             Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        TradesmanProfilePage(user: _currentUser,)));
+                                        TradesmanEditProfilePage(user: _currentUser,)));
                           }),
                     ),
                     trailing: Text("${_distanceInMeters} km"),

@@ -4,9 +4,13 @@ import 'package:flutter/rendering.dart';
 class ProfileWidget extends StatefulWidget {
   final String imagePath;
   final VoidCallback onClicked;
-  const ProfileWidget(
-      {Key? key, required this.imagePath, required this.onClicked})
-      : super(key: key);
+  final bool isEdit;
+  const ProfileWidget({
+    Key? key,
+    required this.imagePath,
+    required this.onClicked,
+    this.isEdit = false,
+  }) : super(key: key);
 
   @override
   _ProfileWidgetState createState() => _ProfileWidgetState();
@@ -51,7 +55,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     return buildCircle(
       all: 8,
       child: Icon(
-        Icons.edit,
+        widget.isEdit ? Icons.add_a_photo : Icons.edit,
         color: Colors.white,
         size: 20,
       ),
