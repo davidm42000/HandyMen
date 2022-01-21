@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-class ProfileWidget extends StatefulWidget {
+class EditProfileWidget extends StatefulWidget {
   final String imagePath;
   final VoidCallback onClicked;
   final bool isEdit;
-  const ProfileWidget({
+  const EditProfileWidget({
     Key? key,
     required this.imagePath,
     required this.onClicked,
@@ -13,12 +13,12 @@ class ProfileWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ProfileWidgetState createState() => _ProfileWidgetState();
+  _EditProfileWidgetState createState() => _EditProfileWidgetState();
 }
 
 late String _imagePath;
 
-class _ProfileWidgetState extends State<ProfileWidget> {
+class _EditProfileWidgetState extends State<EditProfileWidget> {
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -55,7 +55,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     return buildCircle(
       all: 8,
       child: Icon(
-        widget.isEdit ? Icons.add_a_photo : Icons.edit,
+        Icons.add_a_photo,
         color: Colors.white,
         size: 20,
       ),

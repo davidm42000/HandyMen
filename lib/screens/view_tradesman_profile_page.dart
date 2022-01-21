@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:handy_men/templates/normal_user_bottom_bar.dart';
-import 'package:handy_men/templates/profile_widget.dart';
+import 'package:handy_men/templates/edit_profile_widget.dart';
 import 'package:handy_men/templates/view_profile_widget.dart';
 
 class ViewTradesmanProfilePage extends StatefulWidget {

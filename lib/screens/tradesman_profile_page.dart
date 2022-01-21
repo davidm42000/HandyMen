@@ -2,8 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:handy_men/screens/tradesman_edit_profile_page.dart';
 import 'package:handy_men/templates/normal_user_bottom_bar.dart';
-import 'package:handy_men/templates/profile_widget.dart';
+import 'package:handy_men/templates/edit_profile_widget.dart';
 import 'package:handy_men/templates/tradesmen_bottom_bar.dart';
+import 'package:handy_men/templates/view_profile_widget.dart';
 
 class TradesmanProfilePage extends StatefulWidget {
   final User user;
@@ -40,7 +41,7 @@ class _TradesmanProfilePageState extends State<TradesmanProfilePage> {
           physics: BouncingScrollPhysics(),
           children: [
             const SizedBox(height: 10),
-            ProfileWidget(
+            ViewProfileWidget(
               imagePath: 'https://picsum.photos/250?image=9',
               onClicked: () async {},
             ),

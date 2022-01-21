@@ -6,7 +6,6 @@ import 'package:handy_men/models/tradesman_model.dart';
 import 'package:handy_men/screens/tradesman_edit_profile_page.dart';
 import 'package:handy_men/screens/tradesman_profile_page.dart';
 import 'package:handy_men/screens/view_tradesman_profile_page.dart';
-import 'package:handy_men/templates/tradesman_tile.dart';
 import 'package:location/location.dart' as loc;
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

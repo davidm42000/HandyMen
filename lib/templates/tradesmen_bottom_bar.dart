@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:handy_men/screens/normal_user_home_page.dart';
 import 'package:handy_men/screens/normal_user_profile_page.dart';
 import 'package:handy_men/screens/tradesman_profile_page.dart';
-import 'package:handy_men/screens/tradesmen_home_page.dart';
 import 'package:handy_men/screens/tradesmen_profile_page.dart';
 
 class TradesmenBottomBar extends StatefulWidget {
