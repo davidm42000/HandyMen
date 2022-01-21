@@ -6,6 +6,7 @@ import 'package:handy_men/models/tradesman_model.dart';
 import 'package:handy_men/screens/normal_user_home_page.dart';
 import 'package:handy_men/screens/normal_user_profile_page.dart';
 import 'package:handy_men/screens/register_page.dart';
+import 'package:handy_men/screens/tradesman_profile_page.dart';
 import 'package:handy_men/screens/tradesmen_profile_page.dart';
 import 'package:handy_men/services/fire_auth.dart';
 import 'package:handy_men/services/validator.dart';
@@ -196,7 +197,7 @@ class _LoginPageState extends State<LoginPage> {
                                                       .pushReplacement(
                                                     MaterialPageRoute(
                                                         builder: (context) =>
-                                                            TrademenProfilePage(
+                                                            TradesmanProfilePage(
                                                               user: user,
                                                             )),
                                                   );

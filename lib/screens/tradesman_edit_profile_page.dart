@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:handy_men/templates/normal_user_bottom_bar.dart';
 import 'package:handy_men/templates/profile_widget.dart';
 import 'package:handy_men/templates/text_field_widget.dart';
+import 'package:handy_men/templates/tradesmen_bottom_bar.dart';
 
 class TradesmanEditProfilePage extends StatefulWidget {
   final User user;
@@ -40,9 +41,22 @@ class _TradesmanEditProfilePageState extends State<TradesmanEditProfilePage> {
             text: 'Users Full Name',
             onChanged: (name) {},
           ),
+          const SizedBox(height: 24),
+          TextFieldWidget(
+            label: 'Email',
+            text: 'Users Email',
+            onChanged: (email) {},
+          ),
+          const SizedBox(height: 24),
+          TextFieldWidget(
+            label: 'About',
+            text: 'Users About info',
+            maxLines: 5,
+            onChanged: (about) {},
+          ),
         ],
       ),
-      bottomNavigationBar: NormalUserBottomBar(user: widget.user),
+      bottomNavigationBar: TradesmenBottomBar(user: widget.user),
     );
   }
 }

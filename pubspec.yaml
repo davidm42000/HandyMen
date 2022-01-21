@@ -41,6 +41,8 @@ dependencies:
   location: ^4.3.0
   geocoding: ^2.0.1
   geolocator: ^8.0.1
+  image_picker: ^0.8.4+4
+  firebase_storage: ^10.2.5
 
 dev_dependencies:
   flutter_test:
@@ -52,6 +54,9 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
+
+assets:
+  - assets/images/
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

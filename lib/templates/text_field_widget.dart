@@ -4,11 +4,13 @@ class TextFieldWidget extends StatefulWidget {
   final String label;
   final String text;
   final ValueChanged<String> onChanged;
+  final int maxLines;
   const TextFieldWidget({
     Key? key,
     required this.label,
     required this.text,
     required this.onChanged,
+    this.maxLines = 1,
   }) : super(key: key);
 
   @override
@@ -42,6 +44,10 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
         const SizedBox(height: 8),
         TextField(
           controller: controller,
+          maxLines: widget.maxLines,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          ),
         ),
       ],
     );

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:handy_men/screens/normal_user_home_page.dart';
 import 'package:handy_men/screens/normal_user_profile_page.dart';
+import 'package:handy_men/screens/tradesman_profile_page.dart';
 import 'package:handy_men/screens/tradesmen_profile_page.dart';
 import 'package:handy_men/services/fire_auth.dart';
 import 'package:handy_men/services/validator.dart';
@@ -148,7 +149,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                                   .pushReplacement(
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        TrademenProfilePage(
+                                                        TradesmanProfilePage(
                                                           user: user,
                                                         )),
                                               );

@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:handy_men/models/tradesman_model.dart';
 import 'package:handy_men/screens/tradesman_edit_profile_page.dart';
 import 'package:handy_men/screens/tradesman_profile_page.dart';
+import 'package:handy_men/screens/view_tradesman_profile_page.dart';
 import 'package:handy_men/templates/tradesman_tile.dart';
 import 'package:location/location.dart' as loc;
 import 'package:provider/provider.dart';
@@ -16,7 +17,10 @@ class TradesmenList extends StatefulWidget {
   final double distance;
   final String tradeType;
   const TradesmenList(
-      {required this.distance, required this.tradeType, required this.user, Key? key})
+      {required this.distance,
+      required this.tradeType,
+      required this.user,
+      Key? key})
       : super(key: key);
 
   @override
@@ -120,7 +124,11 @@ class _TradesmenListState extends State<TradesmenList> {
                             Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        TradesmanEditProfilePage(user: _currentUser,)));
+                                        ViewTradesmanProfilePage(
+                                          user: _currentUser,
+                                          name: data['name'],
+                                          email: data['email'],
+                                        )));
                           }),
                     ),
                     trailing: Text("${_distanceInMeters} km"),

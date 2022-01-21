@@ -1,21 +1,33 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:handy_men/screens/tradesman_edit_profile_page.dart';
 import 'package:handy_men/templates/normal_user_bottom_bar.dart';
 import 'package:handy_men/templates/profile_widget.dart';
-import 'package:handy_men/templates/tradesmen_bottom_bar.dart';
+import 'package:handy_men/templates/view_profile_widget.dart';
 
-class TradesmanProfilePage extends StatefulWidget {
+class ViewTradesmanProfilePage extends StatefulWidget {
   final User user;
-  const TradesmanProfilePage({Key? key, required this.user}) : super(key: key);
+  final String name;
+  final String email;
+  const ViewTradesmanProfilePage({
+    Key? key,
+    required this.user,
+    required this.name,
+    required this.email,
+  }) : super(key: key);
 
   @override
-  _TradesmanProfilePageState createState() => _TradesmanProfilePageState();
+  _ViewTradesmanProfilePageState createState() =>
+      _ViewTradesmanProfilePageState();
 }
 
-class _TradesmanProfilePageState extends State<TradesmanProfilePage> {
+class _ViewTradesmanProfilePageState extends State<ViewTradesmanProfilePage> {
   @override
   Widget build(BuildContext context) {
+    // final ref =
+    //     FirebaseStorage.instance.ref().child('assets/images/electrician.jpg');
+    // var url = ref.getDownloadURL();
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.orange,
@@ -23,24 +35,12 @@ class _TradesmanProfilePageState extends State<TradesmanProfilePage> {
           title: Text(
             'Profile ',
           ),
-          actions: <Widget>[
-            FlatButton.icon(
-              icon: Icon(Icons.edit),
-              label: Text('Edit'),
-              onPressed: () async {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => TradesmanEditProfilePage(
-                          user: widget.user,
-                        )));
-              },
-            ),
-          ],
         ),
         body: ListView(
           physics: BouncingScrollPhysics(),
           children: [
             const SizedBox(height: 10),
-            ProfileWidget(
+            ViewProfileWidget(
               imagePath: 'https://picsum.photos/250?image=9',
               onClicked: () async {},
             ),
@@ -54,21 +54,21 @@ class _TradesmanProfilePageState extends State<TradesmanProfilePage> {
             buildAbout(),
           ],
         ),
-        bottomNavigationBar: TradesmenBottomBar(user: widget.user));
+        bottomNavigationBar: NormalUserBottomBar(user: widget.user));
   }
 
   Widget buildName() {
     return Column(
       children: [
         Text(
-          'Username',
+          widget.name,
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
         ),
         const SizedBox(
           height: 4,
         ),
         Text(
-          'Email',
+          widget.email,
           style: TextStyle(color: Colors.grey, height: 3),
         ),
       ],
