@@ -120,14 +120,12 @@ class _TradesmenListState extends State<TradesmenList> {
                       child: TextButton(
                           child: Text('View Profile'),
                           onPressed: () async {
-                            Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        ViewTradesmanProfilePage(
-                                          user: _currentUser,
-                                          name: data['name'],
-                                          email: data['email'],
-                                        )));
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => ViewTradesmanProfilePage(
+                                      user: _currentUser,
+                                      name: data['name'],
+                                      email: data['email'],
+                                    )));
                           }),
                     ),
                     trailing: Text("${_distanceInMeters} km"),

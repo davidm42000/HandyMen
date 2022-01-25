@@ -18,7 +18,7 @@ class TradesmanEditProfilePage extends StatefulWidget {
 }
 
 class _TradesmanEditProfilePageState extends State<TradesmanEditProfilePage> {
-  String url = 'https://picsum.photos/250?image=9';
+  // String url = 'https://picsum.photos/250?image=9';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,48 +30,44 @@ class _TradesmanEditProfilePageState extends State<TradesmanEditProfilePage> {
         ),
       ),
       body: StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection('tradesmen')
-              .doc(widget.user.uid)
-              .collection('images')
-              .snapshots(),
+          stream:
+              // FirebaseFirestore.instance
+              //     .collection('tradesmen')
+              //     .doc(widget.user.uid)
+              //     .collection('images')
+              //     .snapshots(),
+              FirebaseFirestore.instance
+                  .collection('tradesmen')
+                  .doc(widget.user.uid)
+                  .snapshots(),
           builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
             if (!snapshot.hasData) {
-              return (const Center(child: Text('No Image Uploaded')));
+              return (const Center(child: Text('Loading')));
             } else {
-              buildProfile();
               // String url = snapshot.data!.docs[0]['downloadURL'];
+              var userDocument = snapshot.data;
               return ListView(
                 padding: EdgeInsets.symmetric(horizontal: 32),
                 physics: BouncingScrollPhysics(),
                 children: [
-                  EditProfileWidget(
-                    imagePath: url,
-                    isEdit: true,
-                    onClicked: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => UploadImage(
-                                user: widget.user,
-                              )));
-                    },
-                  ),
+                  buildProfileImage(),
                   const SizedBox(height: 24),
                   TextFieldWidget(
                     label: 'Full Name',
-                    text: 'Users Full Name',
+                    text: userDocument!['name'],
                     onChanged: (name) {},
                   ),
                   const SizedBox(height: 24),
                   TextFieldWidget(
                     label: 'Email',
-                    text: 'Users Email',
+                    text: userDocument['email'],
                     onChanged: (email) {},
                   ),
                   const SizedBox(height: 24),
                   TextFieldWidget(
                     label: 'About',
-                    text: 'Users About info',
+                    text: userDocument['about'],
                     maxLines: 5,
                     onChanged: (about) {},
                   ),
@@ -83,21 +79,29 @@ class _TradesmanEditProfilePageState extends State<TradesmanEditProfilePage> {
     );
   }
 
-  Future buildProfile() async {
-    FirebaseFirestore.instance
-        .collection('tradesmen')
-        .doc(widget.user.uid)
-        .collection('images')
-        .doc('profile_image')
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        print('Document exists on the database');
-        print(documentSnapshot['downloadURL'].toString());
-        setState(() {
-          url = documentSnapshot['downloadURL'].toString();
+  Widget buildProfileImage() {
+    return StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection('tradesmen')
+            .doc(widget.user.uid)
+            .collection('images')
+            .snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) {
+            return (const Center(child: Text('No Image Uploaded')));
+          } else {
+            String url = snapshot.data!.docs[0]['downloadURL'];
+            return EditProfileWidget(
+              imagePath: url,
+              isEdit: true,
+              onClicked: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => UploadImage(
+                          user: widget.user,
+                        )));
+              },
+            );
+          }
         });
-      }
-    });
   }
 }

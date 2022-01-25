@@ -25,9 +25,6 @@ class ViewTradesmanProfilePage extends StatefulWidget {
 class _ViewTradesmanProfilePageState extends State<ViewTradesmanProfilePage> {
   @override
   Widget build(BuildContext context) {
-    // final ref =
-    //     FirebaseStorage.instance.ref().child('assets/images/electrician.jpg');
-    // var url = ref.getDownloadURL();
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.orange,
