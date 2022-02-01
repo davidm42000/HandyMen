@@ -34,6 +34,7 @@ class _TradesmenListState extends State<TradesmenList> {
   var _userLatitude;
   var _userCurrentAddress;
   var _distanceInMeters = 0.0;
+  var url = '';
 
   late double _distance;
   late String _tradeType;
@@ -103,6 +104,7 @@ class _TradesmenListState extends State<TradesmenList> {
             print("Tradesman longitude: ${_tradesmanLongitude}");
             print("Users latitude: ${_userLatitude}");
             print("Users longitude: ${_userLongitude}");
+            String id = data['id'];
             if (_distanceInMeters < _distance) {
               this._error = false;
               return Padding(
@@ -110,9 +112,15 @@ class _TradesmenListState extends State<TradesmenList> {
                 child: Card(
                   margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
                   child: ListTile(
-                    leading: CircleAvatar(
-                      radius: 25.0,
-                      backgroundColor: Colors.orange,
+                    // leading: CircleAvatar(
+                    //   radius: 25.0,
+                    //   backgroundColor: Colors.orange,
+
+                    // ),
+                    leading: SizedBox(
+                      height: 30,
+                      width: 80,
+                      child: Text(data['trade']),
                     ),
                     title: Text(data['name']),
                     subtitle: SizedBox(
@@ -125,6 +133,7 @@ class _TradesmenListState extends State<TradesmenList> {
                                       user: _currentUser,
                                       name: data['name'],
                                       email: data['email'],
+                                      id : data['id'],
                                     )));
                           }),
                     ),

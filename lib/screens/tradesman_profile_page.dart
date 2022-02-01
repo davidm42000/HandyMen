@@ -50,8 +50,9 @@ class _TradesmanProfilePageState extends State<TradesmanProfilePage> {
               } else {
                 // String url = snapshot.data!.docs[0]['downloadURL'];
                 var userDocument = snapshot.data;
-                String name = userDocument!['name'];
-                String email = userDocument['email'];
+                if (userDocument!['loggedIn'] == 'no') {
+                  setStandardProfile();
+                }
                 return ListView(
                   physics: BouncingScrollPhysics(),
                   children: [
@@ -252,4 +253,22 @@ class _TradesmanProfilePageState extends State<TradesmanProfilePage> {
         height: 24,
         child: VerticalDivider(),
       );
+
+  setStandardProfile() async {
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    firebaseFirestore
+        .collection('tradesmen')
+        .doc(widget.user.uid)
+        .collection('images')
+        .doc('profile_image')
+        .set({'downloadURL': 'https://picsum.photos/250?image=9'});
+
+    firebaseFirestore.collection('tradesmen').doc(widget.user.uid).set({
+      'name': '',
+      'email': '',
+      'about': '',
+      'loggedIn': 'yes',
+      'id': widget.user.uid,
+    });
+  }
 }
