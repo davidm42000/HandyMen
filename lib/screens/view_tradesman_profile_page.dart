@@ -68,7 +68,7 @@ class _ViewTradesmanProfilePageState extends State<ViewTradesmanProfilePage> {
                           height: 4,
                         ),
                         Text(
-                          userDocument!['email'],
+                          userDocument['email'],
                           style: TextStyle(color: Colors.grey, height: 3),
                         ),
                       ],

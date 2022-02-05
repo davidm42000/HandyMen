@@ -103,14 +103,16 @@ class _TrademenProfilePageState extends State<TrademenProfilePage> {
                         _isSigningOut = true;
                       });
                       await FirebaseAuth.instance.signOut();
-                      setState(() {
-                        _isSigningOut = false;
-                      });
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) => LoginPage(),
-                        ),
-                      );
+                      if (mounted) {
+                        setState(() {
+                          _isSigningOut = false;
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => LoginPage(),
+                            ),
+                          );
+                        });
+                      }
                     },
                     child: Text('Sign out'),
                     style: ElevatedButton.styleFrom(

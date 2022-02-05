@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:handy_men/screens/tradesman_profile_page.dart';
+import 'package:handy_men/screens/tradesmen_profile_page.dart';
 import 'package:handy_men/services/upload_image.dart';
 import 'package:handy_men/services/validator.dart';
 import 'package:handy_men/templates/normal_user_bottom_bar.dart';
@@ -147,6 +149,9 @@ class _TradesmanEditProfilePageState extends State<TradesmanEditProfilePage> {
                         'name': _nameTextController.text,
                         'about': _aboutTextController.text,
                         'email': _emailTextController.text,
+                      });
+                      setState(() {
+                        Navigator.of(context).pop();
                       });
                     },
                   ),

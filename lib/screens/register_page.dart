@@ -145,26 +145,32 @@ class _RegisterPageState extends State<RegisterPage> {
                                             });
 
                                             if (_isTrademan == true) {
-                                              Navigator.of(context)
-                                                  .pushReplacement(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        TradesmanProfilePage(
-                                                          user: user,
-                                                        )),
-                                              );
+                                              setState(() {
+                                                Navigator.of(context)
+                                                    .pushReplacement(
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          TradesmanProfilePage(
+                                                            user: user,
+                                                          )),
+                                                );
+                                              });
                                             } else {
-                                              Navigator.of(context)
-                                                  .pushReplacement(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        NormalUserHomePage(
-                                                          user: user,
-                                                          distance: 20.0,
-                                                          selectedDistance: '20km',
-                                                          selectedTrade: 'All',
-                                                        )),
-                                              );
+                                              setState(() {
+                                                Navigator.of(context)
+                                                    .pushReplacement(
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          NormalUserHomePage(
+                                                            user: user,
+                                                            distance: 20.0,
+                                                            selectedDistance:
+                                                                '20km',
+                                                            selectedTrade:
+                                                                'All',
+                                                          )),
+                                                );
+                                              });
                                             }
                                           }
                                         }

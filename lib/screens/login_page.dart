@@ -86,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Firebase Authentication'),
+          title: Text('HandyMen'),
           backgroundColor: Colors.orange,
         ),
         body: FutureBuilder(
@@ -193,27 +193,32 @@ class _LoginPageState extends State<LoginPage> {
                                                 });
 
                                                 if (_isTrademan == true) {
-                                                  Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            TradesmanProfilePage(
-                                                              user: user,
-                                                            )),
-                                                  );
+                                                  setState(() {
+                                                    Navigator.of(context)
+                                                        .pushReplacement(
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              TradesmanProfilePage(
+                                                                user: user,
+                                                              )),
+                                                    );
+                                                  });
                                                 } else {
-                                                  Navigator.of(context)
-                                                      .pushReplacement(
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            NormalUserHomePage(
-                                                              user: user,
-                                                              distance: 20.0,
-                                                              selectedDistance:
-                                                                  '20km',
-                                                              selectedTrade:
-                                                                  'All',
-                                                            )),
-                                                  );
+                                                  setState(() {
+                                                    Navigator.of(context)
+                                                        .pushReplacement(
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              NormalUserHomePage(
+                                                                user: user,
+                                                                distance: 20.0,
+                                                                selectedDistance:
+                                                                    '20km',
+                                                                selectedTrade:
+                                                                    'All',
+                                                              )),
+                                                    );
+                                                  });
                                                 }
                                               } else {
                                                 setState(() {
@@ -235,12 +240,14 @@ class _LoginPageState extends State<LoginPage> {
                                       Expanded(
                                         child: ElevatedButton(
                                           onPressed: () {
-                                            Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    RegisterPage(),
-                                              ),
-                                            );
+                                            setState(() {
+                                              Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      RegisterPage(),
+                                                ),
+                                              );
+                                            });
                                           },
                                           style: ElevatedButton.styleFrom(),
                                           child: Text(
