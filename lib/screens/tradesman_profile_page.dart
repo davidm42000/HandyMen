@@ -67,13 +67,13 @@ class _TradesmanProfilePageState extends State<TradesmanProfilePage> {
                 // String url = snapshot.data!.docs[0]['downloadURL'];
                 var userDocument = snapshot.data;
                 GeoPoint gp = userDocument!['location'];
-                getLocation(gp).then((value) => {
-                      setState(() {
-                        _address =
-                            "${value.locality}, ${value.name}, ${value.postalCode}";
-                      })
-                    });
-                print(gp.latitude);
+                // getLocation(gp).then((value) => {
+                //       setState(() {
+                //         _address =
+                //             "${value.locality}, ${value.name}, ${value.postalCode}";
+                //       })
+                //     });
+                // print(gp.latitude);
                 return ListView(
                   physics: BouncingScrollPhysics(),
                   children: [
@@ -206,6 +206,7 @@ class _TradesmanProfilePageState extends State<TradesmanProfilePage> {
                     const SizedBox(
                       height: 48,
                     ),
+                    buildLocationBox(),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 48),
                       child: Column(
@@ -252,23 +253,37 @@ class _TradesmanProfilePageState extends State<TradesmanProfilePage> {
   }
 
   Widget buildLocationBox() {
-    return StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('tradesmen')
-            .doc(widget.user.uid)
-            .collection('images')
-            .snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) {
-            return (const Center(child: Text('No Image Uploaded')));
-          } else {
-            String url = snapshot.data!.docs[0]['downloadURL'];
-            return ViewProfileWidget(
-              imagePath: url,
-              onClicked: () {},
-            );
-          }
-        });
+    CollectionReference tradesmen =
+        FirebaseFirestore.instance.collection('tradesmen');
+
+    return FutureBuilder<DocumentSnapshot>(
+      future: tradesmen.doc(widget.user.uid).get(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return Text("Something went wrong");
+        }
+
+        if (snapshot.hasData && !snapshot.data!.exists) {
+          return Text("Document does not exist");
+        }
+
+        if (snapshot.connectionState == ConnectionState.done) {
+          Map<String, dynamic> data =
+              snapshot.data!.data() as Map<String, dynamic>;
+
+          GeoPoint gp = data['location'];
+          getLocation(gp).then((value) => {
+                setState(() {
+                  _address =
+                      "${value.locality}, ${value.name}, ${value.postalCode}";
+                })
+              });
+        }
+
+        return Container();
+      },
+    );
   }
 
   // Widget buildProfileImage() {
