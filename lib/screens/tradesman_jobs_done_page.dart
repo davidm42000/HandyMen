@@ -11,20 +11,18 @@ import 'package:handy_men/templates/tradesmen_bottom_bar.dart';
 import 'package:handy_men/templates/view_profile_widget.dart';
 import 'package:location/location.dart' as loc;
 
-class TradesmanViewJobsDonePage extends StatefulWidget {
+class TradesmanJobsDonePage extends StatefulWidget {
   final User user;
-  final String id;
-  const TradesmanViewJobsDonePage({
+  const TradesmanJobsDonePage({
     Key? key,
     required this.user,
-    required this.id,
   }) : super(key: key);
 
   @override
-  _TradesmanViewJobsDonePageState createState() => _TradesmanViewJobsDonePageState();
+  _TradesmanJobsDonePageState createState() => _TradesmanJobsDonePageState();
 }
 
-class _TradesmanViewJobsDonePageState extends State<TradesmanViewJobsDonePage> {
+class _TradesmanJobsDonePageState extends State<TradesmanJobsDonePage> {
   @override
   void initState() {
     // enableService();
@@ -33,12 +31,13 @@ class _TradesmanViewJobsDonePageState extends State<TradesmanViewJobsDonePage> {
 
   late Stream<QuerySnapshot> _jobsDoneStream = FirebaseFirestore.instance
       .collection('tradesmen')
-      .doc(widget.id)
+      .doc(widget.user.uid)
       .collection('jobs_done')
       .snapshots();
 
   @override
   Widget build(BuildContext context) {
+    int index = 1;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.orange,
@@ -73,10 +72,34 @@ class _TradesmanViewJobsDonePageState extends State<TradesmanViewJobsDonePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 30),
-                    Text(
-                      'Description',
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    Row(
+                      children: [
+                        Text(
+                          'Job ${index++} Description',
+                          style: TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(width: 15),
+                        FlatButton.icon(
+                          icon: Icon(
+                            Icons.edit,
+                            size: 20,
+                          ),
+                          label: Text(
+                            'Edit Job',
+                            style: TextStyle(fontSize: 13),
+                          ),
+                          color: Colors.orange[400],
+                          onPressed: () async {
+                            // Navigator.of(context).push(MaterialPageRoute(
+                            //     builder: (context) => TradesmanEditProfilePage(
+                            //           user: widget.user,
+                            //         )));
+                          },
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24)),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 16),
                     Text(
@@ -101,7 +124,7 @@ class _TradesmanViewJobsDonePageState extends State<TradesmanViewJobsDonePage> {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection('tradesmen')
-          .doc(widget.id)
+          .doc(widget.user.uid)
           .collection('jobs_done')
           .doc(id)
           .collection('images')

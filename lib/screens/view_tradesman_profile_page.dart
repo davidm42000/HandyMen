@@ -131,7 +131,8 @@ class _ViewTradesmanProfilePageState extends State<ViewTradesmanProfilePage> {
                             padding: EdgeInsets.symmetric(vertical: 4),
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => TradesmanJobsDonePage(
+                                  builder: (context) =>
+                                      TradesmanViewJobsDonePage(
                                         user: widget.user,
                                         id: widget.id,
                                       )));

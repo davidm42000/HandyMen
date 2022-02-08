@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:handy_men/screens/tradesman_edit_profile_page.dart';
+import 'package:handy_men/screens/tradesman_jobs_done_page.dart';
 import 'package:handy_men/templates/normal_user_bottom_bar.dart';
 import 'package:handy_men/templates/edit_profile_widget.dart';
 import 'package:handy_men/templates/tradesmen_bottom_bar.dart';
@@ -153,7 +154,12 @@ class _TradesmanProfilePageState extends State<TradesmanProfilePage> {
                           buildDivider(),
                           MaterialButton(
                             padding: EdgeInsets.symmetric(vertical: 4),
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => TradesmanJobsDonePage(
+                                        user: widget.user,
+                                      )));
+                            },
                             materialTapTargetSize:
                                 MaterialTapTargetSize.shrinkWrap,
                             child: Column(
