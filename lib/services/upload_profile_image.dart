@@ -6,15 +6,15 @@ import 'dart:io';
 
 import 'package:image_picker/image_picker.dart';
 
-class UploadImage extends StatefulWidget {
+class UploadProfileImage extends StatefulWidget {
   final User user;
-  const UploadImage({Key? key, required this.user}) : super(key: key);
+  const UploadProfileImage({Key? key, required this.user}) : super(key: key);
 
   @override
-  _UploadImageState createState() => _UploadImageState();
+  _UploadProfileImageState createState() => _UploadProfileImageState();
 }
 
-class _UploadImageState extends State<UploadImage> {
+class _UploadProfileImageState extends State<UploadProfileImage> {
   File? _image;
   final imagePicker = ImagePicker();
   String? downloadURL;

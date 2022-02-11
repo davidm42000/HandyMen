@@ -3,18 +3,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:handy_men/screens/tradesman_contact_page.dart';
 import 'package:handy_men/screens/view_tradesman_jobs_done_page.dart';
 import 'package:handy_men/templates/normal_user_bottom_bar.dart';
 import 'package:handy_men/templates/edit_profile_widget.dart';
 import 'package:handy_men/templates/view_profile_widget.dart';
 
-class ViewTradesmanProfilePage extends StatefulWidget {
+class TradesmanContactPage extends StatefulWidget {
   final User user;
   final String name;
   final String email;
   final String id;
-  const ViewTradesmanProfilePage({
+  const TradesmanContactPage({
     Key? key,
     required this.user,
     required this.name,
@@ -23,11 +22,10 @@ class ViewTradesmanProfilePage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ViewTradesmanProfilePageState createState() =>
-      _ViewTradesmanProfilePageState();
+  _TradesmanContactPageState createState() => _TradesmanContactPageState();
 }
 
-class _ViewTradesmanProfilePageState extends State<ViewTradesmanProfilePage> {
+class _TradesmanContactPageState extends State<TradesmanContactPage> {
   var _address = 'Not KNown';
   @override
   Widget build(BuildContext context) {
@@ -36,7 +34,7 @@ class _ViewTradesmanProfilePageState extends State<ViewTradesmanProfilePage> {
           backgroundColor: Colors.orange,
           elevation: 0,
           title: Text(
-            'Tradesman Profile ',
+            'Tradesman Contact Page',
           ),
         ),
         body: StreamBuilder(
@@ -55,7 +53,7 @@ class _ViewTradesmanProfilePageState extends State<ViewTradesmanProfilePage> {
                   physics: BouncingScrollPhysics(),
                   children: [
                     const SizedBox(
-                      height: 10,
+                      height: 48,
                     ),
                     buildProfileImage(),
                     const SizedBox(
@@ -69,36 +67,17 @@ class _ViewTradesmanProfilePageState extends State<ViewTradesmanProfilePage> {
                               fontWeight: FontWeight.bold, fontSize: 24),
                         ),
                         const SizedBox(
-                          height: 4,
+                          height: 32,
                         ),
+                        buildLocationBox(),
                         Text(
-                          userDocument['email'],
-                          style: TextStyle(color: Colors.grey, height: 3),
+                          _address,
+                          style: TextStyle(fontSize: 16, height: 1.4),
                         ),
                       ],
                     ),
                     const SizedBox(
                       height: 24,
-                    ),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => TradesmanContactPage(
-                                    user: widget.user,
-                                    id: widget.id,
-                                    name: widget.name,
-                                    email: widget.email,
-                                  )));
-                        },
-                        child: Text('Contact'),
-                        style: ElevatedButton.styleFrom(
-                          onPrimary: Colors.white,
-                          shape: StadiumBorder(),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 32, vertical: 12),
-                        ),
-                      ),
                     ),
                     const SizedBox(
                       height: 24,
@@ -117,7 +96,7 @@ class _ViewTradesmanProfilePageState extends State<ViewTradesmanProfilePage> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  '4/5',
+                                  'Mobile',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 24,
@@ -127,7 +106,7 @@ class _ViewTradesmanProfilePageState extends State<ViewTradesmanProfilePage> {
                                   height: 2,
                                 ),
                                 Text(
-                                  'Ranking',
+                                  userDocument['phone_num'],
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -138,14 +117,7 @@ class _ViewTradesmanProfilePageState extends State<ViewTradesmanProfilePage> {
                           buildDivider(),
                           MaterialButton(
                             padding: EdgeInsets.symmetric(vertical: 4),
-                            onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) =>
-                                      TradesmanViewJobsDonePage(
-                                        user: widget.user,
-                                        id: widget.id,
-                                      )));
-                            },
+                            onPressed: () {},
                             materialTapTargetSize:
                                 MaterialTapTargetSize.shrinkWrap,
                             child: Column(
@@ -153,7 +125,7 @@ class _ViewTradesmanProfilePageState extends State<ViewTradesmanProfilePage> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  '100',
+                                  'Email',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 24,
@@ -163,56 +135,13 @@ class _ViewTradesmanProfilePageState extends State<ViewTradesmanProfilePage> {
                                   height: 2,
                                 ),
                                 Text(
-                                  'Jobs Done',
+                                  widget.email,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 48,
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 48),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'About',
-                            style: TextStyle(
-                                fontSize: 24, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            userDocument['about'],
-                            style: TextStyle(fontSize: 16, height: 1.4),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 48,
-                    ),
-                    buildLocationBox(),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 48),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Location',
-                            style: TextStyle(
-                                fontSize: 24, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            _address,
-                            style: TextStyle(fontSize: 16, height: 1.4),
                           ),
                         ],
                       ),

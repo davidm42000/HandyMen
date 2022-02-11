@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:handy_men/screens/tradesman_edit_job_page.dart';
 import 'package:handy_men/screens/tradesman_edit_profile_page.dart';
 import 'package:handy_men/templates/normal_user_bottom_bar.dart';
 import 'package:handy_men/templates/edit_profile_widget.dart';
@@ -37,7 +38,6 @@ class _TradesmanJobsDonePageState extends State<TradesmanJobsDonePage> {
 
   @override
   Widget build(BuildContext context) {
-    int index = 1;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.orange,
@@ -75,7 +75,7 @@ class _TradesmanJobsDonePageState extends State<TradesmanJobsDonePage> {
                     Row(
                       children: [
                         Text(
-                          'Job ${index++} Description',
+                          'Job Description',
                           style: TextStyle(
                               fontSize: 24, fontWeight: FontWeight.bold),
                         ),
@@ -91,10 +91,11 @@ class _TradesmanJobsDonePageState extends State<TradesmanJobsDonePage> {
                           ),
                           color: Colors.orange[400],
                           onPressed: () async {
-                            // Navigator.of(context).push(MaterialPageRoute(
-                            //     builder: (context) => TradesmanEditProfilePage(
-                            //           user: widget.user,
-                            //         )));
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => TradesmanEditJobPage(
+                                      user: widget.user,
+                                      docID: _id,
+                                    )));
                           },
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(24)),
@@ -120,7 +121,6 @@ class _TradesmanJobsDonePageState extends State<TradesmanJobsDonePage> {
   }
 
   Widget buildJobsDoneImages(var id) {
-    List<Material> list = [];
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection('tradesmen')

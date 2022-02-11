@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:handy_men/screens/tradesman_profile_page.dart';
 import 'package:handy_men/screens/tradesmen_profile_page.dart';
-import 'package:handy_men/services/upload_image.dart';
+import 'package:handy_men/services/upload_profile_image.dart';
 import 'package:handy_men/services/validator.dart';
 import 'package:handy_men/templates/normal_user_bottom_bar.dart';
 import 'package:handy_men/templates/edit_profile_widget.dart';
@@ -180,7 +180,7 @@ class _TradesmanEditProfilePageState extends State<TradesmanEditProfilePage> {
               isEdit: true,
               onClicked: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => UploadImage(
+                    builder: (context) => UploadProfileImage(
                           user: widget.user,
                         )));
               },

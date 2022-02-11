@@ -27,7 +27,6 @@ class TradesmanViewJobsDonePage extends StatefulWidget {
 class _TradesmanViewJobsDonePageState extends State<TradesmanViewJobsDonePage> {
   @override
   void initState() {
-    // enableService();
     super.initState();
   }
 
