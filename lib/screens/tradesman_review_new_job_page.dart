@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:handy_men/screens/tradesman_cancel_job_page.dart';
+import 'package:handy_men/screens/tradesman_jobs_done_page.dart';
 import 'package:handy_men/screens/tradesman_profile_page.dart';
 import 'package:handy_men/screens/tradesmen_profile_page.dart';
+import 'package:handy_men/services/upload_new_job_done_image.dart';
 import 'package:handy_men/services/upload_updated_job_done_image.dart';
 import 'package:handy_men/services/upload_profile_image.dart';
 import 'package:handy_men/services/validator.dart';
@@ -11,18 +14,19 @@ import 'package:handy_men/templates/edit_profile_widget.dart';
 import 'package:handy_men/templates/text_field_widget.dart';
 import 'package:handy_men/templates/tradesmen_bottom_bar.dart';
 
-class TradesmanEditJobPage extends StatefulWidget {
+class TradesmanReviewNewJobPage extends StatefulWidget {
   final User user;
   final String docID;
-  const TradesmanEditJobPage(
+  const TradesmanReviewNewJobPage(
       {Key? key, required this.user, required this.docID})
       : super(key: key);
 
   @override
-  _TradesmanEditJobPageState createState() => _TradesmanEditJobPageState();
+  _TradesmanReviewNewJobPageState createState() =>
+      _TradesmanReviewNewJobPageState();
 }
 
-class _TradesmanEditJobPageState extends State<TradesmanEditJobPage> {
+class _TradesmanReviewNewJobPageState extends State<TradesmanReviewNewJobPage> {
   var _nameTextController = TextEditingController();
   var _emailTextController = TextEditingController();
   var _descTextController = TextEditingController();
@@ -33,17 +37,17 @@ class _TradesmanEditJobPageState extends State<TradesmanEditJobPage> {
   final TextEditingController _controller = TextEditingController();
 
   String aboutInfo = 'Tradesman';
-  // String url = 'https://picsum.photos/250?image=9';
   CollectionReference tradesmen =
       FirebaseFirestore.instance.collection('tradesmen');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.orange,
         elevation: 0,
         title: Text(
-          'Edit Job ',
+          'Review & Finish New Job ',
         ),
       ),
       body: StreamBuilder(
@@ -93,30 +97,71 @@ class _TradesmanEditJobPageState extends State<TradesmanEditJobPage> {
                     ],
                   ),
                   buildJobsDoneEditImages(widget.docID),
-                  RaisedButton(
-                    color: Colors.pink[400],
-                    child: Text(
-                      'Update',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onPressed: () async {
-                      tradesmen
-                          .doc(widget.user.uid)
-                          .collection('jobs_done')
-                          .doc(widget.docID)
-                          .update({
-                        'description': _descTextController.text,
-                      });
-                      setState(() {
-                        Navigator.of(context).pop();
-                      });
-                    },
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton.icon(
+                        icon: Icon(Icons.add),
+                        label: Text('Add Image'),
+                        onPressed: () async {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => UploadNewJobDoneImage(
+                                    user: widget.user,
+                                    docID: widget.docID,
+                                  )));
+                        },
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 42,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      RaisedButton(
+                        color: Colors.pink[400],
+                        child: Text(
+                          'Cancel',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        onPressed: () async {
+                          Navigator.of(context)
+                              .pushReplacement(MaterialPageRoute(
+                                  builder: (context) => TradesmanCancelJobPage(
+                                        user: widget.user,
+                                        docID: widget.docID,
+                                      )));
+                        },
+                      ),
+                      RaisedButton(
+                        color: Colors.pink[400],
+                        child: Text(
+                          'Finish',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        onPressed: () async {
+                          tradesmen
+                              .doc(widget.user.uid)
+                              .collection('jobs_done')
+                              .doc(widget.docID)
+                              .update({
+                            'description': _descTextController.text,
+                          });
+
+                          Navigator.of(context)
+                              .pushReplacement(MaterialPageRoute(
+                                  builder: (context) => TradesmanJobsDonePage(
+                                        user: widget.user,
+                                      )));
+                        },
+                      ),
+                    ],
                   ),
                 ],
               );
             }
           }),
-      bottomNavigationBar: TradesmenBottomBar(user: widget.user),
     );
   }
 

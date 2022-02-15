@@ -104,18 +104,6 @@ class _TradesmanProfilePageState extends State<TradesmanProfilePage> {
                     const SizedBox(
                       height: 24,
                     ),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () async {},
-                        child: Text('Contact'),
-                        style: ElevatedButton.styleFrom(
-                          onPrimary: Colors.white,
-                          shape: StadiumBorder(),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 32, vertical: 12),
-                        ),
-                      ),
-                    ),
                     const SizedBox(
                       height: 24,
                     ),

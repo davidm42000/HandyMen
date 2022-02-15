@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:handy_men/screens/tradesman_edit_job_page.dart';
 import 'package:handy_men/screens/tradesman_edit_profile_page.dart';
+import 'package:handy_men/screens/tradesman_review_new_job_page.dart';
 import 'package:handy_men/templates/normal_user_bottom_bar.dart';
 import 'package:handy_men/templates/edit_profile_widget.dart';
 import 'package:handy_men/templates/tradesmen_bottom_bar.dart';
@@ -24,6 +25,8 @@ class TradesmanJobsDonePage extends StatefulWidget {
 }
 
 class _TradesmanJobsDonePageState extends State<TradesmanJobsDonePage> {
+  CollectionReference tradesmen =
+      FirebaseFirestore.instance.collection('tradesmen');
   @override
   void initState() {
     // enableService();
@@ -45,7 +48,28 @@ class _TradesmanJobsDonePageState extends State<TradesmanJobsDonePage> {
         title: Text(
           'Jobs Done ',
         ),
-        actions: <Widget>[],
+        actions: <Widget>[
+          FlatButton.icon(
+            icon: Icon(Icons.add),
+            label: Text('Add Job'),
+            onPressed: () async {
+              var _docid = new DateTime.now().millisecondsSinceEpoch.toString();
+              tradesmen
+                  .doc(widget.user.uid)
+                  .collection('jobs_done')
+                  .doc(_docid)
+                  .set({
+                'description': 'Descrption goes here',
+                'id': _docid,
+              });
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => TradesmanReviewNewJobPage(
+                        user: widget.user,
+                        docID: _docid,
+                      )));
+            },
+          ),
+        ],
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: _jobsDoneStream,
@@ -134,9 +158,7 @@ class _TradesmanJobsDonePageState extends State<TradesmanJobsDonePage> {
           return (const Center(child: Text('No Image Uploaded')));
         }
         int capacity = snapshot.data!.docs.length;
-        String url = snapshot.data!.docs[0]['downloadURL'];
         print(capacity);
-        print(url);
         print(snapshot.data!.docs.length);
 
         return Center(

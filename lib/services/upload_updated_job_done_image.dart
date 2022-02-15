@@ -6,15 +6,22 @@ import 'dart:io';
 
 import 'package:image_picker/image_picker.dart';
 
-class UploadProfileImage extends StatefulWidget {
+class UploadJobDoneImage extends StatefulWidget {
   final User user;
-  const UploadProfileImage({Key? key, required this.user}) : super(key: key);
+  final String docID;
+  final String imageID;
+  const UploadJobDoneImage({
+    Key? key,
+    required this.user,
+    required this.docID,
+    required this.imageID,
+  }) : super(key: key);
 
   @override
-  _UploadProfileImageState createState() => _UploadProfileImageState();
+  _UploadJobDoneImageState createState() => _UploadJobDoneImageState();
 }
 
-class _UploadProfileImageState extends State<UploadProfileImage> {
+class _UploadJobDoneImageState extends State<UploadJobDoneImage> {
   File? _image;
   final imagePicker = ImagePicker();
   String? downloadURL;
@@ -44,8 +51,10 @@ class _UploadProfileImageState extends State<UploadProfileImage> {
     await firebaseFirestore
         .collection('tradesmen')
         .doc(widget.user.uid)
+        .collection('jobs_done')
+        .doc(widget.docID)
         .collection('images')
-        .doc('profile_image')
+        .doc(widget.imageID)
         .set({'downloadURL': downloadURL}).whenComplete(() {
       showSnackBar('Image Uploaded Successfully', Duration(seconds: 1));
       Navigator.of(context).pop();

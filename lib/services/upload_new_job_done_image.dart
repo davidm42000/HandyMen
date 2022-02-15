@@ -6,22 +6,20 @@ import 'dart:io';
 
 import 'package:image_picker/image_picker.dart';
 
-class UploadJobDoneImage extends StatefulWidget {
+class UploadNewJobDoneImage extends StatefulWidget {
   final User user;
   final String docID;
-  final String imageID;
-  const UploadJobDoneImage({
+  const UploadNewJobDoneImage({
     Key? key,
     required this.user,
     required this.docID,
-    required this.imageID,
   }) : super(key: key);
 
   @override
-  _UploadJobDoneImageState createState() => _UploadJobDoneImageState();
+  _UploadNewJobDoneImageState createState() => _UploadNewJobDoneImageState();
 }
 
-class _UploadJobDoneImageState extends State<UploadJobDoneImage> {
+class _UploadNewJobDoneImageState extends State<UploadNewJobDoneImage> {
   File? _image;
   final imagePicker = ImagePicker();
   String? downloadURL;
@@ -48,15 +46,18 @@ class _UploadJobDoneImageState extends State<UploadJobDoneImage> {
     await ref.putFile(_image!);
     downloadURL = await ref.getDownloadURL();
 
+    var _id = new DateTime.now().millisecondsSinceEpoch.toString();
     await firebaseFirestore
         .collection('tradesmen')
         .doc(widget.user.uid)
         .collection('jobs_done')
         .doc(widget.docID)
         .collection('images')
-        .doc(widget.imageID)
-        .set({'downloadURL': downloadURL}).whenComplete(() =>
-            showSnackBar('Image Uploaded Successfully', Duration(seconds: 1)));
+        .doc(_id)
+        .set({'downloadURL': downloadURL}).whenComplete(() {
+      showSnackBar('Image Uploaded Successfully', Duration(seconds: 1));
+      Navigator.of(context).pop();
+    });
   }
 
   //snackbar for showing errors
