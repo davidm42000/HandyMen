@@ -113,10 +113,11 @@ class _TradesmanCancelJobPageState extends State<TradesmanCancelJobPage> {
         .doc(widget.docID)
         .delete()
         .then((value) => print("Doc Deleted"))
-        .whenComplete(() => Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => TradesmanJobsDonePage(
-                  user: widget.user,
-                ))))
+        .whenComplete(
+            () => Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) => TradesmanJobsDonePage(
+                      user: widget.user,
+                    ))))
         .catchError((error) => print("Failed to delete user: $error"));
   }
 }
