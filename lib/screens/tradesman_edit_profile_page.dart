@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:handy_men/screens/tradesman_edit_location_map.dart';
 import 'package:handy_men/screens/tradesman_profile_page.dart';
 import 'package:handy_men/screens/tradesmen_profile_page.dart';
 import 'package:handy_men/services/upload_profile_image.dart';
@@ -138,6 +139,26 @@ class _TradesmanEditProfilePageState extends State<TradesmanEditProfilePage> {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 24),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      RaisedButton(
+                        color: Colors.blue[400],
+                        child: Text(
+                          'Change Location',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        onPressed: () async {
+                          Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => TradesmanEditLocationOnMap(
+                          user: widget.user,
+                        )));
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
                   RaisedButton(
                     color: Colors.pink[400],
                     child: Text(

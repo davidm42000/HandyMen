@@ -8,6 +8,10 @@
    <application
         android:label="handy_men"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBo8dqF1RFM7NNoQnQrDb7I4Mg2loLm8gY" />
+        
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -42,23 +46,7 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-    </application>
 
-    <queries>
-      <!-- If your app opens https URLs -->
-      <intent>
-        <action android:name="android.intent.action.VIEW" />
-        <data android:scheme="https" />
-      </intent>
-      <!-- If your app makes calls -->
-      <intent>
-        <action android:name="android.intent.action.DIAL" />
-        <data android:scheme="tel" />
-      </intent>
-      <!-- If your app emails -->
-      <intent>
-        <action android:name="android.intent.action.SEND" />
-        <data android:mimeType="*/*" />
-      </intent>
-    </queries>
+        
+    </application>
 </manifest>
