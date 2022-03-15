@@ -35,6 +35,7 @@ class _TradesmenListState extends State<TradesmenList> {
   var _userCurrentAddress;
   var _distanceInMeters = 0.0;
   var url = '';
+  var trade_liked;
 
   late double _distance;
   late String _tradeType;
@@ -128,12 +129,26 @@ class _TradesmenListState extends State<TradesmenList> {
                       child: TextButton(
                           child: Text('View Profile'),
                           onPressed: () async {
+                            int count = 0;
+                            var isLiked;
+                            var likedArr = data['liked_by'];
+                            likedArr.forEach((c) {
+                              if (c == widget.user.uid) {
+                                print(c);
+                                isLiked = true;
+                              } else {
+                                isLiked = false;
+                              }
+                              count += 1;
+                            });
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => ViewTradesmanProfilePage(
                                       user: _currentUser,
                                       name: data['name'],
                                       email: data['email'],
-                                      id : data['id'],
+                                      id: data['id'],
+                                      likeCount: data['like_count'],
+                                      isLiked: isLiked,
                                     )));
                           }),
                     ),

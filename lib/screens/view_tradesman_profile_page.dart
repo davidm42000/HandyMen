@@ -8,18 +8,23 @@ import 'package:handy_men/screens/view_tradesman_jobs_done_page.dart';
 import 'package:handy_men/templates/normal_user_bottom_bar.dart';
 import 'package:handy_men/templates/edit_profile_widget.dart';
 import 'package:handy_men/templates/view_profile_widget.dart';
+import 'package:like_button/like_button.dart';
 
 class ViewTradesmanProfilePage extends StatefulWidget {
   final User user;
   final String name;
   final String email;
   final String id;
-  const ViewTradesmanProfilePage({
+  int likeCount;
+  bool isLiked;
+  ViewTradesmanProfilePage({
     Key? key,
     required this.user,
     required this.name,
     required this.email,
     required this.id,
+    required this.likeCount,
+    required this.isLiked,
   }) : super(key: key);
 
   @override
@@ -28,7 +33,12 @@ class ViewTradesmanProfilePage extends StatefulWidget {
 }
 
 class _ViewTradesmanProfilePageState extends State<ViewTradesmanProfilePage> {
+  final double size = 30;
   var _address = 'Not KNown';
+  CollectionReference tradesmen =
+      FirebaseFirestore.instance.collection('tradesmen');
+  CollectionReference normalUsers =
+      FirebaseFirestore.instance.collection('normalUsers');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,6 +48,59 @@ class _ViewTradesmanProfilePageState extends State<ViewTradesmanProfilePage> {
           title: Text(
             'Tradesman Profile ',
           ),
+          actions: <Widget>[
+            LikeButton(
+              size: size,
+              isLiked: widget.isLiked,
+              likeCount: widget.likeCount,
+              likeBuilder: (isLiked) {
+                final color = isLiked ? Colors.red : Colors.white;
+
+                return Icon(Icons.favorite, color: color, size: size);
+              },
+              countBuilder: (count, isLiked, text) {
+                final color = isLiked ? Colors.black : Colors.white;
+
+                return Text(
+                  text,
+                  style: TextStyle(
+                    color: color,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+              },
+              onTap: (isLiked) async {
+                widget.isLiked = !isLiked;
+                widget.likeCount += widget.isLiked ? 1 : -1;
+
+                tradesmen.doc(widget.id).update({
+                  'like_count': widget.likeCount,
+                });
+
+                if (widget.isLiked == false) {
+                  tradesmen.doc(widget.id).update({
+                    'liked_by': FieldValue.arrayRemove([widget.user.uid]),
+                  });
+
+                  normalUsers.doc(widget.user.uid).update({
+                    'favourites': FieldValue.arrayRemove([widget.id])
+                  });
+                }
+
+                if (widget.isLiked == true) {
+                  tradesmen.doc(widget.id).update({
+                    'liked_by': FieldValue.arrayUnion([widget.user.uid]),
+                  });
+                  normalUsers.doc(widget.user.uid).update({
+                    'favourites': FieldValue.arrayUnion([widget.id])
+                  });
+                }
+
+                return !isLiked;
+              },
+            ),
+          ],
         ),
         body: StreamBuilder(
             stream: FirebaseFirestore.instance
@@ -117,7 +180,7 @@ class _ViewTradesmanProfilePageState extends State<ViewTradesmanProfilePage> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  '4/5',
+                                  userDocument['like_count'].toString(),
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 24,
@@ -127,7 +190,7 @@ class _ViewTradesmanProfilePageState extends State<ViewTradesmanProfilePage> {
                                   height: 2,
                                 ),
                                 Text(
-                                  'Ranking',
+                                  'Likes',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -153,7 +216,7 @@ class _ViewTradesmanProfilePageState extends State<ViewTradesmanProfilePage> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  '100',
+                                  userDocument['jobs_done'].toString(),
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 24,

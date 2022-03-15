@@ -15,9 +15,11 @@ import 'package:location/location.dart' as loc;
 
 class TradesmanJobsDonePage extends StatefulWidget {
   final User user;
+  final int jobsDoneAmount;
   const TradesmanJobsDonePage({
     Key? key,
     required this.user,
+    required this.jobsDoneAmount,
   }) : super(key: key);
 
   @override
@@ -60,10 +62,12 @@ class _TradesmanJobsDonePageState extends State<TradesmanJobsDonePage> {
                   .doc(_docid)
                   .set({
                 'description': 'Descrption goes here',
+                'name': 'Name of Job',
                 'id': _docid,
               });
               Navigator.of(context).pushReplacement(MaterialPageRoute(
                   builder: (context) => TradesmanReviewNewJobPage(
+                        jobsDoneAmount: widget.jobsDoneAmount,
                         user: widget.user,
                         docID: _docid,
                       )));
@@ -88,6 +92,7 @@ class _TradesmanJobsDonePageState extends State<TradesmanJobsDonePage> {
               Map<String, dynamic> data =
                   document.data()! as Map<String, dynamic>;
               var _jobDescription = data['description'];
+              var _jobName = data['name'];
               var _id = data['id'];
               print(_jobDescription);
               return Container(
@@ -99,7 +104,7 @@ class _TradesmanJobsDonePageState extends State<TradesmanJobsDonePage> {
                     Row(
                       children: [
                         Text(
-                          'Job Description',
+                          _jobName,
                           style: TextStyle(
                               fontSize: 24, fontWeight: FontWeight.bold),
                         ),
@@ -117,6 +122,7 @@ class _TradesmanJobsDonePageState extends State<TradesmanJobsDonePage> {
                           onPressed: () async {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => TradesmanEditJobPage(
+                                      jobsDoneAmount: widget.jobsDoneAmount,
                                       user: widget.user,
                                       docID: _id,
                                     )));

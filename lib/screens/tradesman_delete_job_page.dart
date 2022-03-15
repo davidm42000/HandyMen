@@ -13,11 +13,11 @@ import 'package:handy_men/templates/edit_profile_widget.dart';
 import 'package:handy_men/templates/text_field_widget.dart';
 import 'package:handy_men/templates/tradesmen_bottom_bar.dart';
 
-class TradesmanCancelJobPage extends StatefulWidget {
+class TradesmanDeleteJobPage extends StatefulWidget {
   final User user;
   final String docID;
   final int jobsDoneAmount;
-  const TradesmanCancelJobPage({
+  const TradesmanDeleteJobPage({
     Key? key,
     required this.user,
     required this.docID,
@@ -25,10 +25,10 @@ class TradesmanCancelJobPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _TradesmanCancelJobPageState createState() => _TradesmanCancelJobPageState();
+  _TradesmanDeleteJobPageState createState() => _TradesmanDeleteJobPageState();
 }
 
-class _TradesmanCancelJobPageState extends State<TradesmanCancelJobPage> {
+class _TradesmanDeleteJobPageState extends State<TradesmanDeleteJobPage> {
   var _length;
   var _nameTextController = TextEditingController();
   var _emailTextController = TextEditingController();
@@ -63,7 +63,7 @@ class _TradesmanCancelJobPageState extends State<TradesmanCancelJobPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Are you sure you want to Cancel?',
+                'Are you sure you want to Delete this Job?',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ],
@@ -78,6 +78,10 @@ class _TradesmanCancelJobPageState extends State<TradesmanCancelJobPage> {
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () async {
+                  var jobs_done_amount = widget.jobsDoneAmount - 1;
+                  tradesmen.doc(widget.user.uid).update({
+                    'jobs_done': jobs_done_amount,
+                  });
                   deleteDoc(context);
                 },
               ),

@@ -146,6 +146,7 @@ class _TradesmanProfilePageState extends State<TradesmanProfilePage> {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => TradesmanJobsDonePage(
                                         user: widget.user,
+                                        jobsDoneAmount: userDocument['jobs_done'],
                                       )));
                             },
                             materialTapTargetSize:
@@ -155,7 +156,7 @@ class _TradesmanProfilePageState extends State<TradesmanProfilePage> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  '100',
+                                  userDocument['jobs_done'].toString(),
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 24,

@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:handy_men/screens/tradesman_delete_job_page.dart';
+import 'package:handy_men/screens/tradesman_jobs_done_page.dart';
 import 'package:handy_men/screens/tradesman_profile_page.dart';
 import 'package:handy_men/screens/tradesmen_profile_page.dart';
 import 'package:handy_men/services/upload_updated_job_done_image.dart';
@@ -14,9 +16,13 @@ import 'package:handy_men/templates/tradesmen_bottom_bar.dart';
 class TradesmanEditJobPage extends StatefulWidget {
   final User user;
   final String docID;
-  const TradesmanEditJobPage(
-      {Key? key, required this.user, required this.docID})
-      : super(key: key);
+  final int jobsDoneAmount;
+  const TradesmanEditJobPage({
+    Key? key,
+    required this.user,
+    required this.docID,
+    required this.jobsDoneAmount,
+  }) : super(key: key);
 
   @override
   _TradesmanEditJobPageState createState() => _TradesmanEditJobPageState();
@@ -45,6 +51,20 @@ class _TradesmanEditJobPageState extends State<TradesmanEditJobPage> {
         title: Text(
           'Edit Job ',
         ),
+        actions: <Widget>[
+          FlatButton.icon(
+            icon: Icon(Icons.delete),
+            label: Text('Delete'),
+            onPressed: () async {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => TradesmanDeleteJobPage(
+                        jobsDoneAmount: widget.jobsDoneAmount,
+                        user: widget.user,
+                        docID: widget.docID,
+                      )));
+            },
+          ),
+        ],
       ),
       body: StreamBuilder(
           stream: FirebaseFirestore.instance
@@ -62,10 +82,11 @@ class _TradesmanEditJobPageState extends State<TradesmanEditJobPage> {
             } else {
               var userDocument = snapshot.data;
               String? desc = userDocument!['description'].toString();
+              String? name = userDocument['name'].toString();
               // String? name = userDocument['name'].toString();
               // String? email = userDocument['email'].toString();
               _descTextController = TextEditingController(text: desc);
-              // _nameTextController = TextEditingController(text: name);
+              _nameTextController = TextEditingController(text: name);
               // _emailTextController = TextEditingController(text: email);
               return ListView(
                 padding: EdgeInsets.symmetric(horizontal: 32),
@@ -76,6 +97,21 @@ class _TradesmanEditJobPageState extends State<TradesmanEditJobPage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text(
+                        'Job Name',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: _nameTextController,
+                        maxLines: 4,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12)),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
                       Text(
                         'Description',
                         style: TextStyle(
@@ -106,6 +142,7 @@ class _TradesmanEditJobPageState extends State<TradesmanEditJobPage> {
                           .doc(widget.docID)
                           .update({
                         'description': _descTextController.text,
+                        'name': _nameTextController.text,
                       });
                       setState(() {
                         Navigator.of(context).pop();
@@ -210,4 +247,20 @@ class _TradesmanEditJobPageState extends State<TradesmanEditJobPage> {
           color: Colors.blueAccent,
         ),
       );
+
+  Future deleteDoc(BuildContext context) async {
+    return await tradesmen
+        .doc(widget.user.uid)
+        .collection('jobs_done')
+        .doc(widget.docID)
+        .delete()
+        .then((value) => print("Doc Deleted"))
+        .whenComplete(
+            () => Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) => TradesmanJobsDonePage(
+                      user: widget.user,
+                      jobsDoneAmount: widget.jobsDoneAmount,
+                    ))))
+        .catchError((error) => print("Failed to delete user: $error"));
+  }
 }

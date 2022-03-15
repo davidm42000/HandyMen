@@ -17,9 +17,13 @@ import 'package:handy_men/templates/tradesmen_bottom_bar.dart';
 class TradesmanReviewNewJobPage extends StatefulWidget {
   final User user;
   final String docID;
-  const TradesmanReviewNewJobPage(
-      {Key? key, required this.user, required this.docID})
-      : super(key: key);
+  final int jobsDoneAmount;
+  const TradesmanReviewNewJobPage({
+    Key? key,
+    required this.user,
+    required this.docID,
+    required this.jobsDoneAmount,
+  }) : super(key: key);
 
   @override
   _TradesmanReviewNewJobPageState createState() =>
@@ -66,10 +70,10 @@ class _TradesmanReviewNewJobPageState extends State<TradesmanReviewNewJobPage> {
             } else {
               var userDocument = snapshot.data;
               String? desc = userDocument!['description'].toString();
-              // String? name = userDocument['name'].toString();
+              String? name = userDocument['name'].toString();
               // String? email = userDocument['email'].toString();
               _descTextController = TextEditingController(text: desc);
-              // _nameTextController = TextEditingController(text: name);
+              _nameTextController = TextEditingController(text: name);
               // _emailTextController = TextEditingController(text: email);
               return ListView(
                 padding: EdgeInsets.symmetric(horizontal: 32),
@@ -80,6 +84,20 @@ class _TradesmanReviewNewJobPageState extends State<TradesmanReviewNewJobPage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text(
+                        'Job Name',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: _nameTextController,
+                        maxLines: 4,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12)),
+                        ),
+                      ),
                       Text(
                         'Description',
                         style: TextStyle(
@@ -129,6 +147,7 @@ class _TradesmanReviewNewJobPageState extends State<TradesmanReviewNewJobPage> {
                           Navigator.of(context)
                               .pushReplacement(MaterialPageRoute(
                                   builder: (context) => TradesmanCancelJobPage(
+                                        jobsDoneAmount: widget.jobsDoneAmount,
                                         user: widget.user,
                                         docID: widget.docID,
                                       )));
@@ -147,11 +166,18 @@ class _TradesmanReviewNewJobPageState extends State<TradesmanReviewNewJobPage> {
                               .doc(widget.docID)
                               .update({
                             'description': _descTextController.text,
+                            'name': _nameTextController.text,
+                          });
+
+                          var jobs_done_amount = widget.jobsDoneAmount + 1;
+                          tradesmen.doc(widget.user.uid).update({
+                            'jobs_done': jobs_done_amount,
                           });
 
                           Navigator.of(context)
                               .pushReplacement(MaterialPageRoute(
                                   builder: (context) => TradesmanJobsDonePage(
+                                        jobsDoneAmount: widget.jobsDoneAmount,
                                         user: widget.user,
                                       )));
                         },
@@ -255,4 +281,18 @@ class _TradesmanReviewNewJobPageState extends State<TradesmanReviewNewJobPage> {
           color: Colors.blueAccent,
         ),
       );
+
+  Future addJobsDoneVal(BuildContext context) async {
+    return await tradesmen
+        .doc(widget.user.uid)
+        .update({})
+        .then((value) => print("Doc Deleted"))
+        .whenComplete(
+            () => Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) => TradesmanJobsDonePage(
+                      user: widget.user,
+                      jobsDoneAmount: widget.jobsDoneAmount,
+                    ))))
+        .catchError((error) => print("Failed to delete user: $error"));
+  }
 }

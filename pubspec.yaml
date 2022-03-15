@@ -44,6 +44,7 @@ dependencies:
   geolocator: ^8.0.1
   image_picker: ^0.8.4+4
   firebase_storage: ^10.2.5
+  like_button: ^2.0.4
   
 
 dev_dependencies:

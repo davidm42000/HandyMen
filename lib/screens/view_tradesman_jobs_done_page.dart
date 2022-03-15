@@ -21,7 +21,8 @@ class TradesmanViewJobsDonePage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _TradesmanViewJobsDonePageState createState() => _TradesmanViewJobsDonePageState();
+  _TradesmanViewJobsDonePageState createState() =>
+      _TradesmanViewJobsDonePageState();
 }
 
 class _TradesmanViewJobsDonePageState extends State<TradesmanViewJobsDonePage> {
@@ -64,6 +65,7 @@ class _TradesmanViewJobsDonePageState extends State<TradesmanViewJobsDonePage> {
               Map<String, dynamic> data =
                   document.data()! as Map<String, dynamic>;
               var _jobDescription = data['description'];
+              var _jobName = data['name'];
               var _id = data['id'];
               print(_jobDescription);
               return Container(
@@ -73,7 +75,7 @@ class _TradesmanViewJobsDonePageState extends State<TradesmanViewJobsDonePage> {
                   children: [
                     const SizedBox(height: 30),
                     Text(
-                      'Description',
+                      _jobName,
                       style:
                           TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
