@@ -42,6 +42,7 @@ class _NormalUserProfilePageState extends State<NormalUserProfilePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Profile'),
+        automaticallyImplyLeading: false,
       ),
       body: Center(
         child: Column(

@@ -57,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
       if (_isTrademan == true) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-              builder: (context) => TrademenProfilePage(
+              builder: (context) => TradesmanProfilePage(
                     user: user,
                   )),
         );

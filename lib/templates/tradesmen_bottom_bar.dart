@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:handy_men/screens/normal_user_home_page.dart';
 import 'package:handy_men/screens/normal_user_profile_page.dart';
+import 'package:handy_men/screens/tradesman_home_page.dart';
 import 'package:handy_men/screens/tradesman_profile_page.dart';
 import 'package:handy_men/screens/tradesmen_profile_page.dart';
 
@@ -31,28 +32,24 @@ class _TradesmenBottomBarState extends State<TradesmenBottomBar> {
         children: [
           FlatButton.icon(
             onPressed: () {
-              setState(() {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        TrademenProfilePage(user: _currentUser),
-                  ),
-                );
-              });
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) =>
+                      TradesmanProfilePage(user: _currentUser),
+                ),
+              );
             },
             icon: Icon(Icons.person),
             label: Padding(padding: EdgeInsets.all(0)),
           ),
           FlatButton.icon(
             onPressed: () {
-              setState(() {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        TradesmanProfilePage(user: _currentUser),
-                  ),
-                );
-              });
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) =>
+                      TradesmanHomePage(user: _currentUser),
+                ),
+              );
             },
             icon: Icon(Icons.home),
             label: Padding(padding: EdgeInsets.all(0)),

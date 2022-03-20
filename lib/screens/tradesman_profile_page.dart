@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:handy_men/screens/tradesman_edit_profile_page.dart';
 import 'package:handy_men/screens/tradesman_jobs_done_page.dart';
+import 'package:handy_men/screens/tradesmen_profile_page.dart';
 import 'package:handy_men/templates/normal_user_bottom_bar.dart';
 import 'package:handy_men/templates/edit_profile_widget.dart';
 import 'package:handy_men/templates/tradesmen_bottom_bar.dart';
@@ -37,6 +38,7 @@ class _TradesmanProfilePageState extends State<TradesmanProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           backgroundColor: Colors.orange,
           elevation: 0,
           title: Text(
@@ -44,11 +46,14 @@ class _TradesmanProfilePageState extends State<TradesmanProfilePage> {
           ),
           actions: <Widget>[
             FlatButton.icon(
-              icon: Icon(Icons.edit),
-              label: Text('Edit'),
+              icon: Icon(
+                Icons.more_horiz,
+                size: 38,
+              ),
+              label: Text(''),
               onPressed: () async {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => TradesmanEditProfilePage(
+                    builder: (context) => TrademenProfilePage(
                           user: widget.user,
                         )));
               },
@@ -80,6 +85,19 @@ class _TradesmanProfilePageState extends State<TradesmanProfilePage> {
                   children: [
                     const SizedBox(
                       height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(242, 0, 0, 0),
+                      child: FlatButton.icon(
+                        icon: Icon(Icons.edit),
+                        label: Text('Edit'),
+                        onPressed: () async {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => TradesmanEditProfilePage(
+                                    user: widget.user,
+                                  )));
+                        },
+                      ),
                     ),
                     buildProfileImage(),
                     const SizedBox(
@@ -121,7 +139,7 @@ class _TradesmanProfilePageState extends State<TradesmanProfilePage> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  '4/5',
+                                  userDocument['like_count'].toString(),
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 24,
@@ -131,7 +149,7 @@ class _TradesmanProfilePageState extends State<TradesmanProfilePage> {
                                   height: 2,
                                 ),
                                 Text(
-                                  'Ranking',
+                                  'Likes',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -146,7 +164,8 @@ class _TradesmanProfilePageState extends State<TradesmanProfilePage> {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => TradesmanJobsDonePage(
                                         user: widget.user,
-                                        jobsDoneAmount: userDocument['jobs_done'],
+                                        jobsDoneAmount:
+                                            userDocument['jobs_done'],
                                       )));
                             },
                             materialTapTargetSize:

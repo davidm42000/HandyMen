@@ -96,10 +96,11 @@ class _NormalUserHomePageState extends State<NormalUserHomePage> {
       appBar: AppBar(
         title: Text('Home Page'),
         backgroundColor: Colors.orange,
+        automaticallyImplyLeading: false,
         actions: <Widget>[
           FlatButton.icon(
             icon: Icon(Icons.settings),
-            label: Text('settings'),
+            label: Text('Filter'),
             onPressed: () async {
               await _showSettingsPanel();
               setState(() {});

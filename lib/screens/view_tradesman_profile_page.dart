@@ -7,6 +7,7 @@ import 'package:handy_men/screens/tradesman_contact_page.dart';
 import 'package:handy_men/screens/view_tradesman_jobs_done_page.dart';
 import 'package:handy_men/templates/normal_user_bottom_bar.dart';
 import 'package:handy_men/templates/edit_profile_widget.dart';
+import 'package:handy_men/templates/request_job_form_page.dart';
 import 'package:handy_men/templates/view_profile_widget.dart';
 import 'package:like_button/like_button.dart';
 
@@ -143,25 +144,51 @@ class _ViewTradesmanProfilePageState extends State<ViewTradesmanProfilePage> {
                     const SizedBox(
                       height: 24,
                     ),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => TradesmanContactPage(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Center(
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => RequestJobPage(
                                     user: widget.user,
                                     id: widget.id,
-                                    name: widget.name,
-                                    email: widget.email,
-                                  )));
-                        },
-                        child: Text('Contact'),
-                        style: ElevatedButton.styleFrom(
-                          onPrimary: Colors.white,
-                          shape: StadiumBorder(),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 32, vertical: 12),
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text('Request Job'),
+                            style: ElevatedButton.styleFrom(
+                              onPrimary: Colors.white,
+                              shape: StadiumBorder(),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 22, vertical: 12),
+                            ),
+                          ),
                         ),
-                      ),
+                        Center(
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => TradesmanContactPage(
+                                        user: widget.user,
+                                        id: widget.id,
+                                        name: widget.name,
+                                        email: widget.email,
+                                      )));
+                            },
+                            child: Text('Contact'),
+                            style: ElevatedButton.styleFrom(
+                              onPrimary: Colors.white,
+                              shape: StadiumBorder(),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 32, vertical: 12),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(
                       height: 24,

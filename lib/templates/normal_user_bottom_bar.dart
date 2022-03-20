@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:handy_men/screens/normal_user_chat_page.dart';
 import 'package:handy_men/screens/normal_user_home_page.dart';
 import 'package:handy_men/screens/normal_user_profile_page.dart';
 
@@ -29,38 +30,40 @@ class _NormalUserBottomBarState extends State<NormalUserBottomBar> {
         children: [
           FlatButton.icon(
             onPressed: () {
-              setState(() {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        NormalUserProfilePage(user: _currentUser),
-                  ),
-                );
-              });
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) =>
+                      NormalUserProfilePage(user: _currentUser),
+                ),
+              );
             },
             icon: Icon(Icons.person),
             label: Padding(padding: EdgeInsets.all(0)),
           ),
           FlatButton.icon(
             onPressed: () {
-              setState(() {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => NormalUserHomePage(
-                      user: _currentUser,
-                      distance: 20.0,
-                      selectedDistance: '20km',
-                      selectedTrade: 'All',
-                    ),
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => NormalUserHomePage(
+                    user: _currentUser,
+                    distance: 20.0,
+                    selectedDistance: '20km',
+                    selectedTrade: 'All',
                   ),
-                );
-              });
+                ),
+              );
             },
             icon: Icon(Icons.home),
             label: Padding(padding: EdgeInsets.all(0)),
           ),
           FlatButton.icon(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => NormalUserChatPage(user: _currentUser),
+                ),
+              );
+            },
             icon: Icon(Icons.mail),
             label: Padding(padding: EdgeInsets.all(0)),
           ),
