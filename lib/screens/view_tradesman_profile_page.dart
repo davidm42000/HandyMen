@@ -61,7 +61,6 @@ class _ViewTradesmanProfilePageState extends State<ViewTradesmanProfilePage> {
               },
               countBuilder: (count, isLiked, text) {
                 final color = isLiked ? Colors.black : Colors.white;
-
                 return Text(
                   text,
                   style: TextStyle(

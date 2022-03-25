@@ -8,7 +8,7 @@ import 'package:handy_men/templates/tradesmen_bottom_bar.dart';
 class TrademenProfilePage extends StatefulWidget {
   final User user;
 
-  const TrademenProfilePage({required this.user});
+  const TrademenProfilePage({Key? key, required this.user}) : super(key: key);
 
   @override
   _TrademenProfilePageState createState() => _TrademenProfilePageState();
@@ -18,11 +18,8 @@ class _TrademenProfilePageState extends State<TrademenProfilePage> {
   bool _isSendingVerification = false;
   bool _isSigningOut = false;
 
-  late User _currentUser;
-
   @override
   void initState() {
-    _currentUser = widget.user;
     super.initState();
   }
 
@@ -37,16 +34,16 @@ class _TrademenProfilePageState extends State<TrademenProfilePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'NAME: ${_currentUser.displayName}',
+              'NAME: ${widget.user.displayName}',
               style: Theme.of(context).textTheme.bodyText1,
             ),
             SizedBox(height: 16.0),
             Text(
-              'EMAIL: ${_currentUser.email}',
+              'EMAIL: ${widget.user.email}',
               style: Theme.of(context).textTheme.bodyText1,
             ),
             SizedBox(height: 16.0),
-            _currentUser.emailVerified
+            widget.user.emailVerified
                 ? Text(
                     'Email verified',
                     style: Theme.of(context)
@@ -70,11 +67,11 @@ class _TrademenProfilePageState extends State<TrademenProfilePage> {
                       ElevatedButton(
                         onPressed: () async {
                           setState(() {
-                            _isSendingVerification = true;
+                            this._isSendingVerification = true;
                           });
-                          await _currentUser.sendEmailVerification();
+                          await widget.user.sendEmailVerification();
                           setState(() {
-                            _isSendingVerification = false;
+                            this._isSendingVerification = false;
                           });
                         },
                         child: Text('Verify email'),
@@ -83,13 +80,7 @@ class _TrademenProfilePageState extends State<TrademenProfilePage> {
                       IconButton(
                         icon: Icon(Icons.refresh),
                         onPressed: () async {
-                          User? user = await FireAuth.refreshUser(_currentUser);
-
-                          if (user != null) {
-                            setState(() {
-                              _currentUser = user;
-                            });
-                          }
+                          User? user = await FireAuth.refreshUser(widget.user);
                         },
                       ),
                     ],
@@ -100,12 +91,12 @@ class _TrademenProfilePageState extends State<TrademenProfilePage> {
                 : ElevatedButton(
                     onPressed: () async {
                       setState(() {
-                        _isSigningOut = true;
+                        this._isSigningOut = true;
                       });
                       await FirebaseAuth.instance.signOut();
                       if (mounted) {
                         setState(() {
-                          _isSigningOut = false;
+                          this._isSigningOut = false;
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
                               builder: (context) => LoginPage(),
@@ -125,7 +116,7 @@ class _TrademenProfilePageState extends State<TrademenProfilePage> {
           ],
         ),
       ),
-      bottomNavigationBar: TradesmenBottomBar(user: _currentUser),
+      bottomNavigationBar: TradesmenBottomBar(user: widget.user),
     );
   }
 }

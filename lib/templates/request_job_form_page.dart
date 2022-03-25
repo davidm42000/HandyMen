@@ -79,6 +79,9 @@ class _RequestJobPageState extends State<RequestJobPage> {
                   .doc(widget.user.uid)
                   .set({
                 'job_description': _jobDescTextController.text,
+                'requester_name': widget.user.displayName,
+                'requester_email': widget.user.email,
+                'id': widget.user.uid,
               }).whenComplete(() {
                 showSnackBar(
                     'Job Request Successfully Sent', Duration(seconds: 1));

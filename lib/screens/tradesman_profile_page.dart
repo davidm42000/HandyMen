@@ -34,6 +34,9 @@ class _TradesmanProfilePageState extends State<TradesmanProfilePage> {
     super.initState();
   }
 
+  CollectionReference tradesmen =
+      FirebaseFirestore.instance.collection('tradesmen');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

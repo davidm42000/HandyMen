@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:handy_men/templates/tradesman_home_page_list.dart';
 import 'package:handy_men/templates/tradesmen_bottom_bar.dart';
 
 class TradesmanHomePage extends StatefulWidget {
@@ -29,6 +30,7 @@ class _TradesmanHomePageState extends State<TradesmanHomePage> {
           ),
         ],
       ),
+      body: TradesmanHomePageList(user: widget.user),
       bottomNavigationBar: TradesmenBottomBar(user: widget.user),
     );
   }

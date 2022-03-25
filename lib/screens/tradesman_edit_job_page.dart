@@ -39,7 +39,6 @@ class _TradesmanEditJobPageState extends State<TradesmanEditJobPage> {
   final TextEditingController _controller = TextEditingController();
 
   String aboutInfo = 'Tradesman';
-  // String url = 'https://picsum.photos/250?image=9';
   CollectionReference tradesmen =
       FirebaseFirestore.instance.collection('tradesmen');
   @override

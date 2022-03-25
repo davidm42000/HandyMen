@@ -130,26 +130,35 @@ class _TradesmenListState extends State<TradesmenList> {
                           child: Text('View Profile'),
                           onPressed: () async {
                             int count = 0;
-                            var isLiked;
-                            var likedArr = data['liked_by'];
-                            likedArr.forEach((c) {
-                              if (c == widget.user.uid) {
-                                print(c);
-                                isLiked = true;
-                              } else {
-                                isLiked = false;
-                              }
-                              count += 1;
-                            });
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => ViewTradesmanProfilePage(
-                                      user: _currentUser,
-                                      name: data['name'],
-                                      email: data['email'],
-                                      id: data['id'],
-                                      likeCount: data['like_count'],
-                                      isLiked: isLiked,
-                                    )));
+                            List likedArr = data['liked_by'] as List;
+                            print("Length: ${likedArr.length}");
+                            if (likedArr.contains(widget.user.uid.toString())) {
+                              print(
+                                  "ID: ${widget.user.uid.toString()}, is in liked array");
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      ViewTradesmanProfilePage(
+                                        user: _currentUser,
+                                        name: data['name'],
+                                        email: data['email'],
+                                        id: data['id'],
+                                        likeCount: data['like_count'],
+                                        isLiked: true,
+                                      )));
+                            } else {
+                              print(
+                                  "ID: ${widget.user.uid.toString()}, is not in liked array");
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      ViewTradesmanProfilePage(
+                                        user: _currentUser,
+                                        name: data['name'],
+                                        email: data['email'],
+                                        id: data['id'],
+                                        likeCount: data['like_count'],
+                                        isLiked: false,
+                                      )));
+                            }
                           }),
                     ),
                     trailing: Text("${_distanceInMeters} km"),

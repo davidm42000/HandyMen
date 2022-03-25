@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:handy_men/screens/tradesman_home_page.dart';
 import 'package:handy_men/screens/tradesman_jobs_done_page.dart';
 import 'package:handy_men/screens/tradesman_profile_page.dart';
 import 'package:handy_men/screens/tradesman_review_new_job_page.dart';
@@ -13,34 +14,40 @@ import 'package:handy_men/templates/edit_profile_widget.dart';
 import 'package:handy_men/templates/text_field_widget.dart';
 import 'package:handy_men/templates/tradesmen_bottom_bar.dart';
 
-class TradesmanDeleteJobPage extends StatefulWidget {
+class TradesmanAcceptJobRequestPage extends StatefulWidget {
   final User user;
   final String docID;
-  final int jobsDoneAmount;
-  const TradesmanDeleteJobPage({
+  final String jobDescription;
+  final String requesterName;
+  final String requesterEmail;
+  const TradesmanAcceptJobRequestPage({
     Key? key,
     required this.user,
     required this.docID,
-    required this.jobsDoneAmount,
+    required this.jobDescription,
+    required this.requesterEmail,
+    required this.requesterName,
   }) : super(key: key);
 
   @override
-  _TradesmanDeleteJobPageState createState() => _TradesmanDeleteJobPageState();
+  _TradesmanAcceptJobRequestPageState createState() =>
+      _TradesmanAcceptJobRequestPageState();
 }
 
-class _TradesmanDeleteJobPageState extends State<TradesmanDeleteJobPage> {
-  var _length;
-  var _nameTextController = TextEditingController();
-  var _emailTextController = TextEditingController();
-  var _descTextController = TextEditingController();
-
-  final _focusName = FocusNode();
-  final _focusEmail = FocusNode();
-
-  final TextEditingController _controller = TextEditingController();
-
+class _TradesmanAcceptJobRequestPageState
+    extends State<TradesmanAcceptJobRequestPage> {
   CollectionReference tradesmen =
       FirebaseFirestore.instance.collection('tradesmen');
+
+  //snackbar for showing errors and messages to users
+  showSnackBar(String snackText, Duration d) {
+    final snackBar = SnackBar(
+      content: Text(snackText),
+      duration: d,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +56,7 @@ class _TradesmanDeleteJobPageState extends State<TradesmanDeleteJobPage> {
         elevation: 0,
         title: Center(
           child: Text(
-            'Delete Job',
+            'Accept Job Request',
           ),
         ),
       ),
@@ -62,7 +69,7 @@ class _TradesmanDeleteJobPageState extends State<TradesmanDeleteJobPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Are you sure you want to Delete this Job?',
+                'Are you sure you want to Accept this Job Request?',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ],
@@ -77,35 +84,26 @@ class _TradesmanDeleteJobPageState extends State<TradesmanDeleteJobPage> {
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () async {
-                  var jobs_done_amount = widget.jobsDoneAmount - 1;
-                  tradesmen.doc(widget.user.uid).update({
-                    'jobs_done': jobs_done_amount,
+                  tradesmen
+                      .doc(widget.user.uid)
+                      .collection('ongoing_jobs')
+                      .doc(widget.docID)
+                      .set({
+                    'job_description': widget.jobDescription,
+                    'requester_name': widget.requesterName,
+                    'requester_email': widget.requesterEmail,
+                    'id': widget.docID,
+                  }).whenComplete(() {
+                    showSnackBar('Job Request Successfully accepted',
+                        Duration(seconds: 1));
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => TradesmanHomePage(
+                              user: widget.user,
+                            )));
                   });
-                  deleteDoc(context);
+                  deleteJobRequest(context);
                 },
               ),
-              // RaisedButton(
-              //   color: Colors.pink[400],
-              //   child: Text(
-              //     'Next',
-              //     style: TextStyle(color: Colors.white),
-              //   ),
-              //   onPressed: () async {
-              //     tradesmen
-              //         .doc(widget.user.uid)
-              //         .collection('jobs_done')
-              //         .doc(_id)
-              //         .set({
-              //       'description': _descTextController.text,
-              //       'id': _id,
-              //     });
-              //     Navigator.of(context).push(MaterialPageRoute(
-              //         builder: (context) => TradesmanReviewNewJobPage(
-              //               user: widget.user,
-              //               docID: _id,
-              //             )));
-              //   },
-              // ),
             ],
           ),
         ],
@@ -113,18 +111,17 @@ class _TradesmanDeleteJobPageState extends State<TradesmanDeleteJobPage> {
     );
   }
 
-  Future deleteDoc(BuildContext context) async {
+  Future deleteJobRequest(BuildContext context) async {
     return await tradesmen
         .doc(widget.user.uid)
-        .collection('jobs_done')
+        .collection('job_requests')
         .doc(widget.docID)
         .delete()
         .then((value) => print("Doc Deleted"))
         .whenComplete(
             () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => TradesmanJobsDonePage(
+                builder: (context) => TradesmanHomePage(
                       user: widget.user,
-                      jobsDoneAmount: widget.jobsDoneAmount,
                     ))))
         .catchError((error) => print("Failed to delete user: $error"));
   }

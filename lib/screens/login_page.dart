@@ -86,6 +86,7 @@ class _LoginPageState extends State<LoginPage> {
       },
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: Text('HandyMen'),
           backgroundColor: Colors.orange,
         ),
