@@ -47,6 +47,7 @@ class _LoginPageState extends State<LoginPage> {
         if (documentSnapshot.exists) {
           print('Document exists on the database');
           if (_isTrademan != true) {
+            if (!mounted) return;
             setState(() {
               _isTrademan = true;
             });
@@ -160,6 +161,7 @@ class _LoginPageState extends State<LoginPage> {
 
                                             if (_formKey.currentState!
                                                 .validate()) {
+                                              if (!mounted) return;
                                               setState(() {
                                                 _isProcessing = true;
                                               });
@@ -172,7 +174,7 @@ class _LoginPageState extends State<LoginPage> {
                                                     _passwordTextController
                                                         .text,
                                               );
-
+                                              if (!mounted) return;
                                               setState(() {
                                                 _isProcessing = false;
                                               });
@@ -187,6 +189,7 @@ class _LoginPageState extends State<LoginPage> {
                                                   if (documentSnapshot.exists) {
                                                     print(
                                                         'Document exists on the database');
+                                                    if (!mounted) return;
                                                     setState(() {
                                                       _isTrademan = true;
                                                     });
@@ -194,38 +197,32 @@ class _LoginPageState extends State<LoginPage> {
                                                 });
 
                                                 if (_isTrademan == true) {
-                                                  setState(() {
-                                                    Navigator.of(context)
-                                                        .pushReplacement(
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              TradesmanProfilePage(
-                                                                user: user,
-                                                              )),
-                                                    );
-                                                  });
+                                                  Navigator.of(context)
+                                                      .pushReplacement(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            TradesmanProfilePage(
+                                                              user: user,
+                                                            )),
+                                                  );
                                                 } else {
-                                                  setState(() {
-                                                    Navigator.of(context)
-                                                        .pushReplacement(
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              NormalUserHomePage(
-                                                                user: user,
-                                                                distance: 20.0,
-                                                                selectedDistance:
-                                                                    '20km',
-                                                                selectedTrade:
-                                                                    'All',
-                                                              )),
-                                                    );
-                                                  });
+                                                  Navigator.of(context)
+                                                      .pushReplacement(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            NormalUserHomePage(
+                                                              user: user,
+                                                              distance: 20.0,
+                                                              selectedDistance:
+                                                                  '20km',
+                                                              selectedTrade:
+                                                                  'All',
+                                                            )),
+                                                  );
                                                 }
                                               } else {
-                                                setState(() {
-                                                  error =
-                                                      'could not sign in with those credentials';
-                                                });
+                                                this.error =
+                                                    'could not sign in with those credentials';
                                               }
                                             }
                                           },
@@ -241,14 +238,12 @@ class _LoginPageState extends State<LoginPage> {
                                       Expanded(
                                         child: ElevatedButton(
                                           onPressed: () {
-                                            setState(() {
-                                              Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      RegisterPage(),
-                                                ),
-                                              );
-                                            });
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    RegisterPage(),
+                                              ),
+                                            );
                                           },
                                           style: ElevatedButton.styleFrom(),
                                           child: Text(
