@@ -29,8 +29,6 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _isProcessing = false;
 
-  bool _isTrademan = false;
-
   String error = '';
 
   Future<FirebaseApp> _initializeFirebase() async {
@@ -46,33 +44,24 @@ class _LoginPageState extends State<LoginPage> {
           .then((DocumentSnapshot documentSnapshot) {
         if (documentSnapshot.exists) {
           print('Document exists on the database');
-          if (_isTrademan != true) {
-            if (!mounted) return;
-            setState(() {
-              _isTrademan = true;
-            });
-          }
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+                builder: (context) => TradesmanProfilePage(
+                      user: user,
+                    )),
+          );
+        } else {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+                builder: (context) => NormalUserHomePage(
+                      user: user,
+                      distance: 20.0,
+                      selectedDistance: '20km',
+                      selectedTrade: 'All',
+                    )),
+          );
         }
       });
-
-      if (_isTrademan == true) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-              builder: (context) => TradesmanProfilePage(
-                    user: user,
-                  )),
-        );
-      } else {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-              builder: (context) => NormalUserHomePage(
-                    user: user,
-                    distance: 20.0,
-                    selectedDistance: '20km',
-                    selectedTrade: 'All',
-                  )),
-        );
-      }
     }
 
     return firebaseApp;
@@ -147,114 +136,100 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                             SizedBox(height: 24.0),
-                            _isProcessing
-                                ? CircularProgressIndicator()
-                                : Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: ElevatedButton(
-                                          onPressed: () async {
-                                            _focusEmail.unfocus();
-                                            _focusPassword.unfocus();
+                            // _isProcessing
+                            //     ? CircularProgressIndicator()
+                            //     :
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: ElevatedButton(
+                                    onPressed: () async {
+                                      _focusEmail.unfocus();
+                                      _focusPassword.unfocus();
 
-                                            if (_formKey.currentState!
-                                                .validate()) {
-                                              if (!mounted) return;
-                                              setState(() {
-                                                _isProcessing = true;
-                                              });
+                                      if (_formKey.currentState!.validate()) {
+                                        // if (!mounted) return;
+                                        // setState(() {
+                                        //   _isProcessing = true;
+                                        // });
 
-                                              User? user = await FireAuth
-                                                  .signInUsingEmailPassword(
-                                                email:
-                                                    _emailTextController.text,
-                                                password:
-                                                    _passwordTextController
-                                                        .text,
+                                        User? user = await FireAuth
+                                            .signInUsingEmailPassword(
+                                          email: _emailTextController.text,
+                                          password:
+                                              _passwordTextController.text,
+                                        );
+                                        // if (!mounted) return;
+                                        // setState(() {
+                                        //   _isProcessing = false;
+                                        // });
+
+                                        if (user != null) {
+                                          FirebaseFirestore.instance
+                                              .collection('tradesmen')
+                                              .doc(user.uid)
+                                              .get()
+                                              .then((DocumentSnapshot
+                                                  documentSnapshot) {
+                                            if (documentSnapshot.exists) {
+                                              print(
+                                                  'Document exists on the database');
+
+                                              Navigator.of(context)
+                                                  .pushReplacement(
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              TradesmanProfilePage(
+                                                                user: user,
+                                                              )));
+                                            } else {
+                                              Navigator.of(context)
+                                                  .pushReplacement(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        NormalUserHomePage(
+                                                          user: user,
+                                                          distance: 20.0,
+                                                          selectedDistance:
+                                                              '20km',
+                                                          selectedTrade: 'All',
+                                                        )),
                                               );
-                                              if (!mounted) return;
-                                              setState(() {
-                                                _isProcessing = false;
-                                              });
-
-                                              if (user != null) {
-                                                FirebaseFirestore.instance
-                                                    .collection('tradesmen')
-                                                    .doc(user.uid)
-                                                    .get()
-                                                    .then((DocumentSnapshot
-                                                        documentSnapshot) {
-                                                  if (documentSnapshot.exists) {
-                                                    print(
-                                                        'Document exists on the database');
-                                                    if (!mounted) return;
-                                                    setState(() {
-                                                      _isTrademan = true;
-                                                    });
-                                                  }
-                                                });
-
-                                                if (_isTrademan == true) {
-                                                  Navigator.of(context)
-                                                      .pushReplacement(
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            TradesmanProfilePage(
-                                                              user: user,
-                                                            )),
-                                                  );
-                                                } else {
-                                                  Navigator.of(context)
-                                                      .pushReplacement(
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            NormalUserHomePage(
-                                                              user: user,
-                                                              distance: 20.0,
-                                                              selectedDistance:
-                                                                  '20km',
-                                                              selectedTrade:
-                                                                  'All',
-                                                            )),
-                                                  );
-                                                }
-                                              } else {
-                                                this.error =
-                                                    'could not sign in with those credentials';
-                                              }
                                             }
-                                          },
-                                          style: ElevatedButton.styleFrom(),
-                                          child: Text(
-                                            'Sign In',
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(width: 24.0),
-                                      Expanded(
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    RegisterPage(),
-                                              ),
-                                            );
-                                          },
-                                          style: ElevatedButton.styleFrom(),
-                                          child: Text(
-                                            'Register',
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                          });
+                                        } else {
+                                          this.error =
+                                              'could not sign in with those credentials';
+                                        }
+                                      }
+                                    },
+                                    style: ElevatedButton.styleFrom(),
+                                    child: Text(
+                                      'Sign In',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
                                   ),
+                                ),
+                                SizedBox(width: 24.0),
+                                Expanded(
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) => RegisterPage(),
+                                        ),
+                                      );
+                                    },
+                                    style: ElevatedButton.styleFrom(),
+                                    child: Text(
+                                      'Register',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                             SizedBox(height: 12.0),
                             Text(
                               error,
