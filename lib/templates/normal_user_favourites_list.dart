@@ -78,11 +78,13 @@ class _FavouriteTradesmenListState extends State<FavouriteTradesmenList> {
               arrayContainsAny: [widget.user.uid.toString()]).snapshots();
       tradesmanStream = _tradesmanStream;
     } else {
+      print("Tradetype: $_tradeType");
       late Stream<QuerySnapshot> _tradesmanStream = FirebaseFirestore.instance
           .collection('tradesmen')
           .orderBy('location', descending: true)
           .where('trade', isEqualTo: _tradeType)
-          .snapshots();
+          .where('liked_by',
+              arrayContainsAny: [widget.user.uid.toString()]).snapshots();
       tradesmanStream = _tradesmanStream;
     }
     return tradesmanStream;
