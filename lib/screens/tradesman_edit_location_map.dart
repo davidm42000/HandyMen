@@ -3,6 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:async';
+import 'package:location/location.dart' as loc;
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
 class TradesmanEditLocationOnMap extends StatefulWidget {
   final User user;
@@ -35,14 +38,19 @@ class _TradesmanEditLocationOnMapState
     zoom: 14.4746,
   );
 
-  static final CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(37.43296265331129, -122.08832357078792),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
+  var _kLake;
+
+  late User _currentUser;
+
+  var location = new loc.Location();
+  var _longitude;
+  var _latitude;
+  var _currentAddress;
 
   @override
   void initState() {
+    enableService();
+    getLocation();
     super.initState();
     setMarker();
   }
@@ -153,6 +161,44 @@ class _TradesmanEditLocationOnMapState
           );
         });
       }
+    });
+  }
+
+  enableService() async {
+    var _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    var _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == loc.PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != loc.PermissionStatus.granted) {
+        return;
+      }
+    }
+  }
+
+  getLocation() async {
+    var _currentLocation = await location.getLocation();
+    print(_currentLocation.longitude);
+    double _lat = _currentLocation.latitude as double;
+    double _long = _currentLocation.longitude as double;
+    List<Placemark> placemarks = await placemarkFromCoordinates(_lat, _long);
+    Placemark place = placemarks[0];
+    setState(() {
+      _longitude = _currentLocation.longitude;
+      _latitude = _currentLocation.latitude;
+      _currentAddress =
+          "${place.locality}, ${place.name}, ${place.postalCode}, ${place.country}}";
+      _kLake = CameraPosition(
+          bearing: 192.8334901395799,
+          target: LatLng(_latitude, _longitude),
+          tilt: 59.440717697143555,
+          zoom: 19.151926040649414);
     });
   }
 }

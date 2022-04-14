@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:handy_men/models/tradesman_model.dart';
-import 'package:handy_men/screens/normal_user_favourites_page.dart';
+import 'package:handy_men/templates/favourites_settings_form.dart';
 import 'package:handy_men/templates/normal_user_favourites_list.dart';
 import 'package:handy_men/screens/normal_user_profile_page.dart';
 import 'package:handy_men/services/fire_auth.dart';
@@ -14,13 +14,13 @@ import 'package:handy_men/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class NormalUserHomePage extends StatefulWidget {
+class NormalUserFavouritesPage extends StatefulWidget {
   final String selectedDistance;
   final String selectedTrade;
   final double distance;
   final User user;
 
-  const NormalUserHomePage({
+  const NormalUserFavouritesPage({
     required this.user,
     required this.selectedDistance,
     required this.selectedTrade,
@@ -29,10 +29,11 @@ class NormalUserHomePage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _NormalUserHomePageState createState() => _NormalUserHomePageState();
+  _NormalUserFavouritesPageState createState() =>
+      _NormalUserFavouritesPageState();
 }
 
-class _NormalUserHomePageState extends State<NormalUserHomePage> {
+class _NormalUserFavouritesPageState extends State<NormalUserFavouritesPage> {
   final Stream<QuerySnapshot> _tradesmanStream =
       FirebaseFirestore.instance.collection('tradesmen').snapshots();
 
@@ -61,7 +62,7 @@ class _NormalUserHomePageState extends State<NormalUserHomePage> {
           builder: (context) {
             return Container(
               padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
-              child: SettingsForm(
+              child: FavouritesSettingsForm(
                 user: _currentUser,
                 selectedDistance: _selectedDistance,
                 selectedTrade: _selectedTrade,
@@ -72,9 +73,8 @@ class _NormalUserHomePageState extends State<NormalUserHomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home Page'),
+        title: Text('Favourites Page'),
         backgroundColor: Colors.orange,
-        automaticallyImplyLeading: false,
         actions: <Widget>[
           FlatButton.icon(
             icon: Icon(Icons.settings),
@@ -86,23 +86,10 @@ class _NormalUserHomePageState extends State<NormalUserHomePage> {
           ),
         ],
       ),
-      body: TradesmenList(
+      body: FavouriteTradesmenList(
         distance: _distance,
         tradeType: _selectedTrade,
         user: _currentUser,
-      ),
-      floatingActionButton: FloatingActionButton(
-        // isExtended: true,
-        child: Icon(Icons.favorite_border),
-        backgroundColor: Colors.orangeAccent,
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => NormalUserFavouritesPage(
-                  user: _currentUser,
-                  distance: 20.0,
-                  selectedDistance: '20km',
-                  selectedTrade: 'All')));
-        },
       ),
       bottomNavigationBar: NormalUserBottomBar(user: _currentUser),
     );
