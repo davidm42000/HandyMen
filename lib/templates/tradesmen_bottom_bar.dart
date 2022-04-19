@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:handy_men/screens/normal_user_home_page.dart';
+import 'package:handy_men/screens/normal_user_search_page.dart';
 import 'package:handy_men/screens/normal_user_profile_page.dart';
 import 'package:handy_men/screens/tradesman_home_page.dart';
 import 'package:handy_men/screens/tradesman_profile_page.dart';

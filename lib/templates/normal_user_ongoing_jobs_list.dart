@@ -5,39 +5,43 @@ import 'package:geolocator/geolocator.dart';
 import 'package:handy_men/models/tradesman_model.dart';
 import 'package:handy_men/screens/tradesman_edit_profile_page.dart';
 import 'package:handy_men/screens/tradesman_job_request_info.dart';
+import 'package:handy_men/screens/tradesman_ongoing_job_info.dart';
 import 'package:handy_men/screens/tradesman_profile_page.dart';
 import 'package:handy_men/screens/view_tradesman_profile_page.dart';
+import 'package:handy_men/templates/normal_user_bottom_bar.dart';
 import 'package:handy_men/templates/tradesmen_bottom_bar.dart';
 import 'package:location/location.dart' as loc;
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:math';
 
-class JobRequestList extends StatefulWidget {
+class NormalUserOnGoingJobsList extends StatefulWidget {
   final User user;
-  const JobRequestList({required this.user, Key? key}) : super(key: key);
+  const NormalUserOnGoingJobsList({required this.user, Key? key})
+      : super(key: key);
 
   @override
-  _JobRequestListState createState() => _JobRequestListState();
+  _NormalUserOnGoingJobsListState createState() =>
+      _NormalUserOnGoingJobsListState();
 }
 
-class _JobRequestListState extends State<JobRequestList> {
+class _NormalUserOnGoingJobsListState extends State<NormalUserOnGoingJobsList> {
   @override
   void initState() {
     super.initState();
   }
 
-  late Stream<QuerySnapshot> _jobRequestsStream = FirebaseFirestore.instance
-      .collection('tradesmen')
+  late Stream<QuerySnapshot> _ongoingJobStream = FirebaseFirestore.instance
+      .collection('normalUsers')
       .doc(widget.user.uid)
-      .collection('job_requests')
+      .collection('ongoing_jobs')
       .snapshots();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Job Requests'),
+        title: Text('Ongoing Jobs'),
         backgroundColor: Colors.orange,
         actions: <Widget>[
           FlatButton.icon(
@@ -48,7 +52,7 @@ class _JobRequestListState extends State<JobRequestList> {
         ],
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: _jobRequestsStream,
+        stream: _ongoingJobStream,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
             return Text('Something went wrong');
@@ -73,11 +77,11 @@ class _JobRequestListState extends State<JobRequestList> {
                       icon: Icon(Icons.arrow_forward),
                       label: Text(''),
                       onPressed: () async {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => TradesmanJobRequestInfoPage(
-                                  user: widget.user,
-                                  docID: _id,
-                                )));
+                        // Navigator.of(context).push(MaterialPageRoute(
+                        //     builder: (context) => TradesmanOnGoingJobInfoPage(
+                        //           user: widget.user,
+                        //           docID: _id,
+                        //         )));
                       },
                     ),
                   ),
@@ -87,7 +91,7 @@ class _JobRequestListState extends State<JobRequestList> {
           );
         },
       ),
-      bottomNavigationBar: TradesmenBottomBar(user: widget.user),
+      bottomNavigationBar: NormalUserBottomBar(user: widget.user),
     );
   }
 }

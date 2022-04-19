@@ -14,13 +14,13 @@ import 'package:handy_men/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class NormalUserHomePage extends StatefulWidget {
+class NormalUserSearchPage extends StatefulWidget {
   final String selectedDistance;
   final String selectedTrade;
   final double distance;
   final User user;
 
-  const NormalUserHomePage({
+  const NormalUserSearchPage({
     required this.user,
     required this.selectedDistance,
     required this.selectedTrade,
@@ -29,10 +29,10 @@ class NormalUserHomePage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _NormalUserHomePageState createState() => _NormalUserHomePageState();
+  _NormalUserSearchPageState createState() => _NormalUserSearchPageState();
 }
 
-class _NormalUserHomePageState extends State<NormalUserHomePage> {
+class _NormalUserSearchPageState extends State<NormalUserSearchPage> {
   final Stream<QuerySnapshot> _tradesmanStream =
       FirebaseFirestore.instance.collection('tradesmen').snapshots();
 

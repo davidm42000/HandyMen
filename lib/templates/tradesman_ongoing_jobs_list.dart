@@ -14,15 +14,17 @@ import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:math';
 
-class OnGoingJobsList extends StatefulWidget {
+class TradesmanOnGoingJobsList extends StatefulWidget {
   final User user;
-  const OnGoingJobsList({required this.user, Key? key}) : super(key: key);
+  const TradesmanOnGoingJobsList({required this.user, Key? key})
+      : super(key: key);
 
   @override
-  _OnGoingJobsListState createState() => _OnGoingJobsListState();
+  _TradesmanOnGoingJobsListState createState() =>
+      _TradesmanOnGoingJobsListState();
 }
 
-class _OnGoingJobsListState extends State<OnGoingJobsList> {
+class _TradesmanOnGoingJobsListState extends State<TradesmanOnGoingJobsList> {
   @override
   void initState() {
     super.initState();
@@ -63,7 +65,8 @@ class _OnGoingJobsListState extends State<OnGoingJobsList> {
             children: snapshot.data!.docs.map((DocumentSnapshot document) {
               Map<String, dynamic> data =
                   document.data()! as Map<String, dynamic>;
-              var _id = data['id'];
+              String _id = data['id'];
+              print(_id);
               return Padding(
                 padding: EdgeInsets.only(top: 8.0),
                 child: Card(

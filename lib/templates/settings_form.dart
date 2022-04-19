@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:handy_men/screens/normal_user_home_page.dart';
+import 'package:handy_men/screens/normal_user_search_page.dart';
 import 'package:handy_men/screens/normal_user_home_page_filtered.dart';
 import 'package:handy_men/templates/tradesmen_list.dart';
 
@@ -112,7 +112,7 @@ class _SettingsFormState extends State<SettingsForm> {
               print('Settings distnace $_distance');
               Navigator.pop(context);
               Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => NormalUserHomePage(
+                  builder: (context) => NormalUserSearchPage(
                         user: _currentUser,
                         distance: _distance,
                         selectedDistance: _selectedDistance,

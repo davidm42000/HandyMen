@@ -6,6 +6,8 @@ import 'package:handy_men/models/tradesman_model.dart';
 import 'package:handy_men/screens/tradesman_edit_profile_page.dart';
 import 'package:handy_men/screens/tradesman_profile_page.dart';
 import 'package:handy_men/screens/view_tradesman_profile_page.dart';
+import 'package:handy_men/templates/normal_user_ongoing_jobs_list.dart';
+import 'package:handy_men/templates/normal_user_quotes_list.dart';
 import 'package:handy_men/templates/tradesman_job_request_list.dart';
 import 'package:handy_men/templates/tradesman_ongoing_jobs_list.dart';
 import 'package:location/location.dart' as loc;
@@ -13,37 +15,37 @@ import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:math';
 
-class TradesmanHomePageList extends StatefulWidget {
+class NormalUserNotificationsPageList extends StatefulWidget {
   final User user;
-  const TradesmanHomePageList({required this.user, Key? key}) : super(key: key);
+  const NormalUserNotificationsPageList({required this.user, Key? key})
+      : super(key: key);
 
   @override
-  _TradesmanHomePageListState createState() => _TradesmanHomePageListState();
+  _NormalUserNotificationsPageListState createState() =>
+      _NormalUserNotificationsPageListState();
 }
 
-class _TradesmanHomePageListState extends State<TradesmanHomePageList> {
+class _NormalUserNotificationsPageListState
+    extends State<NormalUserNotificationsPageList> {
   late User _currentUser;
   var num_job_requests;
 
   @override
   void initState() {
-    getJobRequestNum();
+    getQuotesNum();
     getOngoingJobsNum();
     _currentUser = widget.user;
     super.initState();
   }
 
-  CollectionReference tradesmen =
-      FirebaseFirestore.instance.collection('tradesmen');
-
-  late Stream<QuerySnapshot> _jobsDoneStream =
-      tradesmen.doc(widget.user.uid).collection('jobs_done').snapshots();
+  CollectionReference normalUsers =
+      FirebaseFirestore.instance.collection('normalUsers');
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
         stream: FirebaseFirestore.instance
-            .collection('tradesmen')
+            .collection('normalUsers')
             .doc(widget.user.uid)
             .snapshots(),
         builder:
@@ -53,21 +55,21 @@ class _TradesmanHomePageListState extends State<TradesmanHomePageList> {
           } else {
             var userDocument = snapshot.data;
             String name = userDocument!['name'].toString();
+            print(name);
 
             return ListView(children: <Widget>[
               Card(
                 margin: EdgeInsets.fromLTRB(20.0, 30.0, 20.0, 0.0),
                 child: ListTile(
-                  leading: Text(userDocument['job_request_num'].toString()),
-                  title: Text('Job Requests'),
+                  leading: Text(userDocument['quotes_num'].toString()),
+                  title: Text('Quotes'),
                   trailing: FlatButton.icon(
                     icon: Icon(Icons.arrow_forward),
                     label: Text(''),
                     onPressed: () async {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => TradesmanJobRequestList(
+                          builder: (context) => NormalUserQuotesList(
                                 user: widget.user,
-                                tradesmanName: name,
                               )));
                     },
                   ),
@@ -84,7 +86,7 @@ class _TradesmanHomePageListState extends State<TradesmanHomePageList> {
                     label: Text(''),
                     onPressed: () async {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => TradesmanOnGoingJobsList(
+                          builder: (context) => NormalUserOnGoingJobsList(
                                 user: widget.user,
                               )));
                     },
@@ -92,23 +94,23 @@ class _TradesmanHomePageListState extends State<TradesmanHomePageList> {
                 ),
               ),
               const SizedBox(height: 28),
-              // Card(
-              //   margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
-              //   child: ListTile(
-              //     leading: Text('Jobs Done'),
-              //     title: Text('Jobs Done'),
-              //     trailing: FlatButton.icon(
-              //       icon: Icon(Icons.arrow_forward),
-              //       label: Text(''),
-              //       onPressed: () async {
-              //         // Navigator.of(context).push(MaterialPageRoute(
-              //         //     builder: (context) => JobRequestList(
-              //         //           user: widget.user,
-              //         //         )));
-              //       },
-              //     ),
-              //   ),
-              // ),
+              Card(
+                margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
+                child: ListTile(
+                  leading: Text('Jobs Done'),
+                  title: Text('Jobs Done'),
+                  trailing: FlatButton.icon(
+                    icon: Icon(Icons.arrow_forward),
+                    label: Text(''),
+                    onPressed: () async {
+                      // Navigator.of(context).push(MaterialPageRoute(
+                      //     builder: (context) => JobRequestList(
+                      //           user: widget.user,
+                      //         )));
+                    },
+                  ),
+                ),
+              ),
             ]);
           }
         });
@@ -129,10 +131,10 @@ class _TradesmanHomePageListState extends State<TradesmanHomePageList> {
   //       .catchError((error) => print("Failed to delete user: $error"));
   // }
 
-  Future<void> getJobRequestNum() async {
+  Future<void> getQuotesNum() async {
     // Get docs from collection reference
     QuerySnapshot querySnapshot =
-        await tradesmen.doc(widget.user.uid).collection('job_requests').get();
+        await normalUsers.doc(widget.user.uid).collection('quotes').get();
 
     // Get data from docs and convert map to List
     final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
@@ -143,16 +145,17 @@ class _TradesmanHomePageListState extends State<TradesmanHomePageList> {
     var length = allData.length;
 
     print('length of requests list is: $length');
+    print(widget.user.uid);
 
-    tradesmen.doc(widget.user.uid).update({
-      'job_request_num': length,
+    normalUsers.doc(widget.user.uid).update({
+      'quotes_num': length,
     });
   }
 
   Future<void> getOngoingJobsNum() async {
     // Get docs from collection reference
     QuerySnapshot querySnapshot =
-        await tradesmen.doc(widget.user.uid).collection('ongoing_jobs').get();
+        await normalUsers.doc(widget.user.uid).collection('ongoing_jobs').get();
 
     // Get data from docs and convert map to List
     final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
@@ -162,7 +165,7 @@ class _TradesmanHomePageListState extends State<TradesmanHomePageList> {
 
     var length = allData.length;
 
-    tradesmen.doc(widget.user.uid).update({
+    normalUsers.doc(widget.user.uid).update({
       'ongoing_jobs_num': length,
     });
   }

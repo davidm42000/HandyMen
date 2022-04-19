@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:handy_men/screens/normal_user_chat_page.dart';
-import 'package:handy_men/screens/normal_user_home_page.dart';
+import 'package:handy_men/screens/normal_user_notifications_page.dart';
+import 'package:handy_men/screens/normal_user_search_page.dart';
 import 'package:handy_men/screens/normal_user_profile_page.dart';
 
 class NormalUserBottomBar extends StatefulWidget {
@@ -44,7 +45,20 @@ class _NormalUserBottomBarState extends State<NormalUserBottomBar> {
             onPressed: () {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
-                  builder: (context) => NormalUserHomePage(
+                  builder: (context) => NormalUserNotificationsPage(
+                    user: _currentUser,
+                  ),
+                ),
+              );
+            },
+            icon: Icon(Icons.notifications),
+            label: Padding(padding: EdgeInsets.all(0)),
+          ),
+          FlatButton.icon(
+            onPressed: () {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => NormalUserSearchPage(
                     user: _currentUser,
                     distance: 20.0,
                     selectedDistance: '20km',
@@ -53,7 +67,7 @@ class _NormalUserBottomBarState extends State<NormalUserBottomBar> {
                 ),
               );
             },
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.search),
             label: Padding(padding: EdgeInsets.all(0)),
           ),
           FlatButton.icon(

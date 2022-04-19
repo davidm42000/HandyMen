@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:handy_men/models/tradesman_model.dart';
-import 'package:handy_men/screens/normal_user_home_page.dart';
+import 'package:handy_men/screens/normal_user_search_page.dart';
 import 'package:handy_men/screens/normal_user_profile_page.dart';
 import 'package:handy_men/screens/register_page.dart';
 import 'package:handy_men/screens/tradesman_profile_page.dart';
@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
         } else {
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
-                builder: (context) => NormalUserHomePage(
+                builder: (context) => NormalUserSearchPage(
                       user: user,
                       distance: 20.0,
                       selectedDistance: '20km',
@@ -149,10 +149,7 @@ class _LoginPageState extends State<LoginPage> {
                                       _focusPassword.unfocus();
 
                                       if (_formKey.currentState!.validate()) {
-                                        // if (!mounted) return;
-                                        // setState(() {
-                                        //   _isProcessing = true;
-                                        // });
+                 
 
                                         User? user = await FireAuth
                                             .signInUsingEmailPassword(
@@ -160,10 +157,7 @@ class _LoginPageState extends State<LoginPage> {
                                           password:
                                               _passwordTextController.text,
                                         );
-                                        // if (!mounted) return;
-                                        // setState(() {
-                                        //   _isProcessing = false;
-                                        // });
+                        
 
                                         if (user != null) {
                                           FirebaseFirestore.instance
@@ -188,7 +182,7 @@ class _LoginPageState extends State<LoginPage> {
                                                   .pushReplacement(
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        NormalUserHomePage(
+                                                        NormalUserSearchPage(
                                                           user: user,
                                                           distance: 20.0,
                                                           selectedDistance:

@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:handy_men/screens/normal_user_accept_quote.dart';
+import 'package:handy_men/screens/normal_user_reject_quote.dart';
 import 'package:handy_men/screens/tradesman_accept_job_request.dart';
 import 'package:handy_men/screens/tradesman_cancel_job_page.dart';
 import 'package:handy_men/screens/tradesman_delete_job_request.dart';
@@ -17,26 +19,33 @@ import 'package:handy_men/templates/edit_profile_widget.dart';
 import 'package:handy_men/templates/text_field_widget.dart';
 import 'package:handy_men/templates/tradesmen_bottom_bar.dart';
 
-class TradesmanJobRequestInfoPage extends StatefulWidget {
+class NormalUserQuoteInfoPage extends StatefulWidget {
   final User user;
   final String docID;
+  final String jobDescription;
+  final String requesterName;
+  final String requesterEmail;
   final String tradesmanName;
-  const TradesmanJobRequestInfoPage({
+  final String quote;
+  const NormalUserQuoteInfoPage({
     Key? key,
     required this.user,
     required this.docID,
+    required this.jobDescription,
+    required this.requesterName,
+    required this.requesterEmail,
     required this.tradesmanName,
+    required this.quote,
   }) : super(key: key);
 
   @override
-  _TradesmanJobRequestInfoPageState createState() =>
-      _TradesmanJobRequestInfoPageState();
+  _NormalUserQuoteInfoPageState createState() =>
+      _NormalUserQuoteInfoPageState();
 }
 
-class _TradesmanJobRequestInfoPageState
-    extends State<TradesmanJobRequestInfoPage> {
-  CollectionReference tradesmen =
-      FirebaseFirestore.instance.collection('tradesmen');
+class _NormalUserQuoteInfoPageState extends State<NormalUserQuoteInfoPage> {
+  CollectionReference normalUsers =
+      FirebaseFirestore.instance.collection('normalUsers');
 
   @override
   Widget build(BuildContext context) {
@@ -45,15 +54,15 @@ class _TradesmanJobRequestInfoPageState
         backgroundColor: Colors.orange,
         elevation: 0,
         title: Text(
-          'Job Request Info',
+          'Quote Info',
         ),
         actions: <Widget>[],
       ),
       body: StreamBuilder(
           stream: FirebaseFirestore.instance
-              .collection('tradesmen')
+              .collection('normalUsers')
               .doc(widget.user.uid)
-              .collection('job_requests')
+              .collection('quotes')
               .doc(widget.docID)
               .snapshots(),
           builder:
@@ -79,7 +88,7 @@ class _TradesmanJobRequestInfoPageState
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        userDocument!['requester_name'],
+                        userDocument!['tradesman_name'],
                         style: TextStyle(fontSize: 16, height: 1.4),
                       ),
                       const SizedBox(height: 28),
@@ -105,6 +114,17 @@ class _TradesmanJobRequestInfoPageState
                         style: TextStyle(fontSize: 16, height: 1.4),
                       ),
                       const SizedBox(height: 28),
+                      Text(
+                        'Quote',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        "€${userDocument['quote']}",
+                        style: TextStyle(fontSize: 16, height: 1.4),
+                      ),
+                      const SizedBox(height: 28),
                     ],
                   ),
                   Row(
@@ -117,10 +137,9 @@ class _TradesmanJobRequestInfoPageState
                           style: TextStyle(color: Colors.white),
                         ),
                         onPressed: () async {
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      TradesmanDeleteJobRequestPage(
+                          Navigator.of(context)
+                              .pushReplacement(MaterialPageRoute(
+                                  builder: (context) => NormalUserRejectQuote(
                                         user: widget.user,
                                         docID: widget.docID,
                                       )));
@@ -133,19 +152,16 @@ class _TradesmanJobRequestInfoPageState
                           style: TextStyle(color: Colors.white),
                         ),
                         onPressed: () async {
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      TradesmanAcceptJobRequestPage(
+                          Navigator.of(context)
+                              .pushReplacement(MaterialPageRoute(
+                                  builder: (context) => NormalUserAcceptQuote(
                                         user: widget.user,
                                         docID: widget.docID,
-                                        jobDescription:
-                                            userDocument['job_description'],
-                                        requesterName:
-                                            userDocument['requester_name'],
-                                        requesterEmail:
-                                            userDocument['requester_email'],
+                                        jobDescription: widget.jobDescription,
+                                        requesterName: widget.requesterName,
+                                        requesterEmail: widget.requesterEmail,
                                         tradesmanName: widget.tradesmanName,
+                                        quote: widget.quote,
                                       )));
                         },
                       ),
@@ -155,7 +171,7 @@ class _TradesmanJobRequestInfoPageState
               );
             }
           }),
-      bottomNavigationBar: TradesmenBottomBar(user: widget.user),
+      bottomNavigationBar: NormalUserBottomBar(user: widget.user),
     );
   }
 }

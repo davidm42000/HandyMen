@@ -11,6 +11,7 @@ import 'package:handy_men/services/upload_profile_image.dart';
 import 'package:handy_men/services/validator.dart';
 import 'package:handy_men/templates/normal_user_bottom_bar.dart';
 import 'package:handy_men/templates/edit_profile_widget.dart';
+import 'package:handy_men/templates/send_quote_form.dart';
 import 'package:handy_men/templates/text_field_widget.dart';
 import 'package:handy_men/templates/tradesmen_bottom_bar.dart';
 
@@ -20,6 +21,7 @@ class TradesmanAcceptJobRequestPage extends StatefulWidget {
   final String jobDescription;
   final String requesterName;
   final String requesterEmail;
+  final String tradesmanName;
   const TradesmanAcceptJobRequestPage({
     Key? key,
     required this.user,
@@ -27,6 +29,7 @@ class TradesmanAcceptJobRequestPage extends StatefulWidget {
     required this.jobDescription,
     required this.requesterEmail,
     required this.requesterName,
+    required this.tradesmanName,
   }) : super(key: key);
 
   @override
@@ -50,6 +53,23 @@ class _TradesmanAcceptJobRequestPageState
 
   @override
   Widget build(BuildContext context) {
+    Future _showSendQuotePanel() async {
+      showModalBottomSheet(
+          context: context,
+          builder: (context) {
+            return Container(
+                padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
+                child: SendQuoteForm(
+                  user: widget.user,
+                  docID: widget.docID,
+                  jobDescription: widget.jobDescription,
+                  requesterName: widget.requesterName,
+                  requesterEmail: widget.requesterEmail,
+                  tradesmanName: widget.tradesmanName,
+                ));
+          });
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.orange,
@@ -80,28 +100,40 @@ class _TradesmanAcceptJobRequestPageState
               RaisedButton(
                 color: Colors.pink[400],
                 child: Text(
+                  'No',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                },
+              ),
+              RaisedButton(
+                color: Colors.green[400],
+                child: Text(
                   'Yes',
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () async {
-                  tradesmen
-                      .doc(widget.user.uid)
-                      .collection('ongoing_jobs')
-                      .doc(widget.docID)
-                      .set({
-                    'job_description': widget.jobDescription,
-                    'requester_name': widget.requesterName,
-                    'requester_email': widget.requesterEmail,
-                    'id': widget.docID,
-                  }).whenComplete(() {
-                    showSnackBar('Job Request Successfully accepted',
-                        Duration(seconds: 1));
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => TradesmanHomePage(
-                              user: widget.user,
-                            )));
-                  });
-                  deleteJobRequest(context);
+                  await _showSendQuotePanel();
+                  setState(() {});
+                  // tradesmen
+                  //     .doc(widget.user.uid)
+                  //     .collection('ongoing_jobs')
+                  //     .doc(widget.docID)
+                  //     .set({
+                  //   'job_description': widget.jobDescription,
+                  //   'requester_name': widget.requesterName,
+                  //   'requester_email': widget.requesterEmail,
+                  //   'id': widget.docID,
+                  // }).whenComplete(() {
+                  //   showSnackBar('Job Request Successfully accepted',
+                  //       Duration(seconds: 1));
+                  //   Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  //       builder: (context) => TradesmanHomePage(
+                  //             user: widget.user,
+                  //           )));
+                  // });
+                  // deleteJobRequest(context);
                 },
               ),
             ],

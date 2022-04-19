@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:handy_men/screens/normal_user_home_page.dart';
+import 'package:handy_men/screens/normal_user_search_page.dart';
 import 'package:handy_men/screens/normal_user_profile_page.dart';
 import 'package:handy_men/screens/tradesman_profile_page.dart';
 import 'package:handy_men/screens/tradesmen_profile_page.dart';
@@ -161,7 +161,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                                     .pushReplacement(
                                                   MaterialPageRoute(
                                                       builder: (context) =>
-                                                          NormalUserHomePage(
+                                                          NormalUserSearchPage(
                                                             user: user,
                                                             distance: 20.0,
                                                             selectedDistance:

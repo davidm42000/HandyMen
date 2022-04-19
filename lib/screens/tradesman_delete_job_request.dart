@@ -64,6 +64,16 @@ class _TradesmanDeleteJobRequestPageState
               RaisedButton(
                 color: Colors.pink[400],
                 child: Text(
+                  'No',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                },
+              ),
+              RaisedButton(
+                color: Colors.green[400],
+                child: Text(
                   'Yes',
                   style: TextStyle(color: Colors.white),
                 ),

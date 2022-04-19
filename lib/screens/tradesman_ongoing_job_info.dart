@@ -77,7 +77,7 @@ class _TradesmanOnGoingJobInfoPageState
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        userDocument!['requester_name'],
+                        userDocument!['contact_name'],
                         style: TextStyle(fontSize: 16, height: 1.4),
                       ),
                       const SizedBox(height: 28),
@@ -88,7 +88,7 @@ class _TradesmanOnGoingJobInfoPageState
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        userDocument['requester_email'],
+                        userDocument['contact_email'],
                         style: TextStyle(fontSize: 16, height: 1.4),
                       ),
                       const SizedBox(height: 28),
@@ -100,6 +100,17 @@ class _TradesmanOnGoingJobInfoPageState
                       const SizedBox(height: 8),
                       Text(
                         userDocument['job_description'],
+                        style: TextStyle(fontSize: 16, height: 1.4),
+                      ),
+                      const SizedBox(height: 28),
+                      Text(
+                        'Price',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        "€${userDocument['price']}",
                         style: TextStyle(fontSize: 16, height: 1.4),
                       ),
                       const SizedBox(height: 28),
