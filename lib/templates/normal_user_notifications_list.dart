@@ -6,6 +6,7 @@ import 'package:handy_men/models/tradesman_model.dart';
 import 'package:handy_men/screens/tradesman_edit_profile_page.dart';
 import 'package:handy_men/screens/tradesman_profile_page.dart';
 import 'package:handy_men/screens/view_tradesman_profile_page.dart';
+import 'package:handy_men/templates/normal_user_jobs_done_list.dart';
 import 'package:handy_men/templates/normal_user_ongoing_jobs_list.dart';
 import 'package:handy_men/templates/normal_user_quotes_list.dart';
 import 'package:handy_men/templates/tradesman_job_request_list.dart';
@@ -34,6 +35,7 @@ class _NormalUserNotificationsPageListState
   void initState() {
     getQuotesNum();
     getOngoingJobsNum();
+    getOnJobsDoneNum();
     _currentUser = widget.user;
     super.initState();
   }
@@ -97,16 +99,16 @@ class _NormalUserNotificationsPageListState
               Card(
                 margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
                 child: ListTile(
-                  leading: Text('Jobs Done'),
+                  leading: Text(userDocument['jobs_done_num'].toString()),
                   title: Text('Jobs Done'),
                   trailing: FlatButton.icon(
                     icon: Icon(Icons.arrow_forward),
                     label: Text(''),
                     onPressed: () async {
-                      // Navigator.of(context).push(MaterialPageRoute(
-                      //     builder: (context) => JobRequestList(
-                      //           user: widget.user,
-                      //         )));
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => NormalUserJobsDoneList(
+                                user: widget.user,
+                              )));
                     },
                   ),
                 ),
@@ -115,21 +117,6 @@ class _NormalUserNotificationsPageListState
           }
         });
   }
-
-  // Future getJobRequestNum(BuildContext context) async {
-  //   return await tradesmen
-  //       .doc(widget.user.uid)
-  //       .collection('job_requests')
-  //       .delete()
-  //       .then((value) => print("Doc Deleted"))
-  //       .whenComplete(
-  //           () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-  //               builder: (context) => TradesmanJobsDonePage(
-  //                     user: widget.user,
-  //                     jobsDoneAmount: widget.jobsDoneAmount,
-  //                   ))))
-  //       .catchError((error) => print("Failed to delete user: $error"));
-  // }
 
   Future<void> getQuotesNum() async {
     // Get docs from collection reference
@@ -167,6 +154,26 @@ class _NormalUserNotificationsPageListState
 
     normalUsers.doc(widget.user.uid).update({
       'ongoing_jobs_num': length,
+    });
+  }
+
+  Future<void> getOnJobsDoneNum() async {
+    // Get docs from collection reference
+    QuerySnapshot querySnapshot = await normalUsers
+        .doc(widget.user.uid)
+        .collection('jobs_done_list')
+        .get();
+
+    // Get data from docs and convert map to List
+    final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    //for a specific field
+    // final allData =
+    //         querySnapshot.docs.map((doc) => doc.get('fieldName')).toList();
+
+    var length = allData.length;
+
+    normalUsers.doc(widget.user.uid).update({
+      'jobs_done_num': length,
     });
   }
 }

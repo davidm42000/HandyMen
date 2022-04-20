@@ -16,8 +16,12 @@ import 'dart:math';
 
 class TradesmanOnGoingJobsList extends StatefulWidget {
   final User user;
-  const TradesmanOnGoingJobsList({required this.user, Key? key})
-      : super(key: key);
+  final String tradesmanName;
+  const TradesmanOnGoingJobsList({
+    required this.user,
+    required this.tradesmanName,
+    Key? key,
+  }) : super(key: key);
 
   @override
   _TradesmanOnGoingJobsListState createState() =>
@@ -81,6 +85,7 @@ class _TradesmanOnGoingJobsListState extends State<TradesmanOnGoingJobsList> {
                             builder: (context) => TradesmanOnGoingJobInfoPage(
                                   user: widget.user,
                                   docID: _id,
+                                  tradesmanName: widget.tradesmanName,
                                 )));
                       },
                     ),

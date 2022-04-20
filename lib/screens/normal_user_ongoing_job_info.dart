@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:handy_men/screens/normal_user_accept_quote.dart';
+import 'package:handy_men/screens/normal_user_reject_quote.dart';
 import 'package:handy_men/screens/tradesman_accept_job_request.dart';
 import 'package:handy_men/screens/tradesman_cancel_job_page.dart';
-import 'package:handy_men/screens/tradesman_confirm_job_done_page.dart';
 import 'package:handy_men/screens/tradesman_delete_job_request.dart';
 import 'package:handy_men/screens/tradesman_home_page.dart';
 import 'package:handy_men/screens/tradesman_jobs_done_page.dart';
@@ -18,26 +19,24 @@ import 'package:handy_men/templates/edit_profile_widget.dart';
 import 'package:handy_men/templates/text_field_widget.dart';
 import 'package:handy_men/templates/tradesmen_bottom_bar.dart';
 
-class TradesmanOnGoingJobInfoPage extends StatefulWidget {
+class NormalUserOngoingJobInfoPage extends StatefulWidget {
   final User user;
   final String docID;
-  final String tradesmanName;
-  const TradesmanOnGoingJobInfoPage({
+  const NormalUserOngoingJobInfoPage({
     Key? key,
     required this.user,
     required this.docID,
-    required this.tradesmanName,
   }) : super(key: key);
 
   @override
-  _TradesmanOnGoingJobInfoPageState createState() =>
-      _TradesmanOnGoingJobInfoPageState();
+  _NormalUserOngoingJobInfoPageState createState() =>
+      _NormalUserOngoingJobInfoPageState();
 }
 
-class _TradesmanOnGoingJobInfoPageState
-    extends State<TradesmanOnGoingJobInfoPage> {
-  CollectionReference tradesmen =
-      FirebaseFirestore.instance.collection('tradesmen');
+class _NormalUserOngoingJobInfoPageState
+    extends State<NormalUserOngoingJobInfoPage> {
+  CollectionReference normalUsers =
+      FirebaseFirestore.instance.collection('normalUsers');
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +51,7 @@ class _TradesmanOnGoingJobInfoPageState
       ),
       body: StreamBuilder(
           stream: FirebaseFirestore.instance
-              .collection('tradesmen')
+              .collection('normalUsers')
               .doc(widget.user.uid)
               .collection('ongoing_jobs')
               .doc(widget.docID)
@@ -80,7 +79,7 @@ class _TradesmanOnGoingJobInfoPageState
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        userDocument!['contact_name'],
+                        userDocument!['tradesman_name'],
                         style: TextStyle(fontSize: 16, height: 1.4),
                       ),
                       const SizedBox(height: 28),
@@ -91,7 +90,7 @@ class _TradesmanOnGoingJobInfoPageState
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        userDocument['contact_email'],
+                        userDocument['tradesman_email'],
                         style: TextStyle(fontSize: 16, height: 1.4),
                       ),
                       const SizedBox(height: 28),
@@ -119,40 +118,11 @@ class _TradesmanOnGoingJobInfoPageState
                       const SizedBox(height: 28),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      RaisedButton(
-                        color: Colors.green[400],
-                        child: Text(
-                          'Job Done',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        onPressed: () async {
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      TradesmanConfirmJobDonePage(
-                                        user: widget.user,
-                                        docID: widget.docID,
-                                        jobDescription:
-                                            userDocument['job_description'],
-                                        contactName:
-                                            userDocument['contact_name'],
-                                        contactEmail:
-                                            userDocument['contact_email'],
-                                        price: userDocument['price'],
-                                        tradesmanName: widget.tradesmanName,
-                                      )));
-                        },
-                      ),
-                    ],
-                  ),
                 ],
               );
             }
           }),
-      bottomNavigationBar: TradesmenBottomBar(user: widget.user),
+      bottomNavigationBar: NormalUserBottomBar(user: widget.user),
     );
   }
 }

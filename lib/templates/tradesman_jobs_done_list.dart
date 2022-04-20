@@ -3,46 +3,48 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:handy_men/models/tradesman_model.dart';
-import 'package:handy_men/screens/normal_user_ongoing_job_info.dart';
 import 'package:handy_men/screens/tradesman_edit_profile_page.dart';
+import 'package:handy_men/screens/tradesman_job_done_info_page.dart';
 import 'package:handy_men/screens/tradesman_job_request_info.dart';
 import 'package:handy_men/screens/tradesman_ongoing_job_info.dart';
 import 'package:handy_men/screens/tradesman_profile_page.dart';
 import 'package:handy_men/screens/view_tradesman_profile_page.dart';
-import 'package:handy_men/templates/normal_user_bottom_bar.dart';
 import 'package:handy_men/templates/tradesmen_bottom_bar.dart';
 import 'package:location/location.dart' as loc;
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:math';
 
-class NormalUserOnGoingJobsList extends StatefulWidget {
+class TradesmanJobsDoneList extends StatefulWidget {
   final User user;
-  const NormalUserOnGoingJobsList({required this.user, Key? key})
-      : super(key: key);
+  final String tradesmanName;
+  const TradesmanJobsDoneList({
+    required this.user,
+    required this.tradesmanName,
+    Key? key,
+  }) : super(key: key);
 
   @override
-  _NormalUserOnGoingJobsListState createState() =>
-      _NormalUserOnGoingJobsListState();
+  _TradesmanJobsDoneListState createState() => _TradesmanJobsDoneListState();
 }
 
-class _NormalUserOnGoingJobsListState extends State<NormalUserOnGoingJobsList> {
+class _TradesmanJobsDoneListState extends State<TradesmanJobsDoneList> {
   @override
   void initState() {
     super.initState();
   }
 
   late Stream<QuerySnapshot> _ongoingJobStream = FirebaseFirestore.instance
-      .collection('normalUsers')
+      .collection('tradesmen')
       .doc(widget.user.uid)
-      .collection('ongoing_jobs')
+      .collection('jobs_done_list')
       .snapshots();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ongoing Jobs'),
+        title: Text('Jobs Done'),
         backgroundColor: Colors.orange,
         actions: <Widget>[
           FlatButton.icon(
@@ -67,8 +69,8 @@ class _NormalUserOnGoingJobsListState extends State<NormalUserOnGoingJobsList> {
             children: snapshot.data!.docs.map((DocumentSnapshot document) {
               Map<String, dynamic> data =
                   document.data()! as Map<String, dynamic>;
-              var _id = data['id'];
-              print("id: $_id");
+              String _id = data['id'];
+              print(_id);
               return Padding(
                 padding: EdgeInsets.only(top: 8.0),
                 child: Card(
@@ -80,9 +82,10 @@ class _NormalUserOnGoingJobsListState extends State<NormalUserOnGoingJobsList> {
                       label: Text(''),
                       onPressed: () async {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => NormalUserOngoingJobInfoPage(
+                            builder: (context) => TradesmanJobDoneInfoPage(
                                   user: widget.user,
                                   docID: _id,
+                                  tradesmanName: widget.tradesmanName,
                                 )));
                       },
                     ),
@@ -93,7 +96,7 @@ class _NormalUserOnGoingJobsListState extends State<NormalUserOnGoingJobsList> {
           );
         },
       ),
-      bottomNavigationBar: NormalUserBottomBar(user: widget.user),
+      bottomNavigationBar: TradesmenBottomBar(user: widget.user),
     );
   }
 }

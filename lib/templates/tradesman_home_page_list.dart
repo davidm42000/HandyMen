@@ -7,6 +7,7 @@ import 'package:handy_men/screens/tradesman_edit_profile_page.dart';
 import 'package:handy_men/screens/tradesman_profile_page.dart';
 import 'package:handy_men/screens/view_tradesman_profile_page.dart';
 import 'package:handy_men/templates/tradesman_job_request_list.dart';
+import 'package:handy_men/templates/tradesman_jobs_done_list.dart';
 import 'package:handy_men/templates/tradesman_ongoing_jobs_list.dart';
 import 'package:location/location.dart' as loc;
 import 'package:provider/provider.dart';
@@ -29,15 +30,13 @@ class _TradesmanHomePageListState extends State<TradesmanHomePageList> {
   void initState() {
     getJobRequestNum();
     getOngoingJobsNum();
+    getJobsDoneNum();
     _currentUser = widget.user;
     super.initState();
   }
 
   CollectionReference tradesmen =
       FirebaseFirestore.instance.collection('tradesmen');
-
-  late Stream<QuerySnapshot> _jobsDoneStream =
-      tradesmen.doc(widget.user.uid).collection('jobs_done').snapshots();
 
   @override
   Widget build(BuildContext context) {
@@ -55,79 +54,72 @@ class _TradesmanHomePageListState extends State<TradesmanHomePageList> {
             String name = userDocument!['name'].toString();
 
             return ListView(children: <Widget>[
-              Card(
-                margin: EdgeInsets.fromLTRB(20.0, 30.0, 20.0, 0.0),
-                child: ListTile(
-                  leading: Text(userDocument['job_request_num'].toString()),
-                  title: Text('Job Requests'),
-                  trailing: FlatButton.icon(
-                    icon: Icon(Icons.arrow_forward),
-                    label: Text(''),
-                    onPressed: () async {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => TradesmanJobRequestList(
-                                user: widget.user,
-                                tradesmanName: name,
-                              )));
-                    },
+              Column(
+                children: [
+                  Card(
+                    margin: EdgeInsets.fromLTRB(20.0, 30.0, 20.0, 0.0),
+                    child: ListTile(
+                      leading: Text(userDocument['job_request_num'].toString()),
+                      title: Text('Job Requests'),
+                      trailing: FlatButton.icon(
+                        icon: Icon(Icons.arrow_forward),
+                        label: Text(''),
+                        onPressed: () async {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => TradesmanJobRequestList(
+                                    user: widget.user,
+                                    tradesmanName: name,
+                                  )));
+                        },
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              const SizedBox(height: 28),
-              Card(
-                margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
-                child: ListTile(
-                  leading: Text(userDocument['ongoing_jobs_num'].toString()),
-                  title: Text('Ongoing Jobs'),
-                  trailing: FlatButton.icon(
-                    icon: Icon(Icons.arrow_forward),
-                    label: Text(''),
-                    onPressed: () async {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => TradesmanOnGoingJobsList(
-                                user: widget.user,
-                              )));
-                    },
+                  const SizedBox(height: 28),
+                  Card(
+                    margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
+                    child: ListTile(
+                      leading:
+                          Text(userDocument['ongoing_jobs_num'].toString()),
+                      title: Text('Ongoing Jobs'),
+                      trailing: FlatButton.icon(
+                        icon: Icon(Icons.arrow_forward),
+                        label: Text(''),
+                        onPressed: () async {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => TradesmanOnGoingJobsList(
+                                    user: widget.user,
+                                    tradesmanName: userDocument['name'],
+                                  )));
+                        },
+                      ),
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 28),
+                  Card(
+                    margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
+                    child: ListTile(
+                      leading: Text(
+                          userDocument['overall_jobs_done_num'].toString()),
+                      title: Text('Jobs Done'),
+                      trailing: FlatButton.icon(
+                        icon: Icon(Icons.arrow_forward),
+                        label: Text(''),
+                        onPressed: () async {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => TradesmanJobsDoneList(
+                                    user: widget.user,
+                                    tradesmanName: userDocument['name'],
+                                  )));
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 28),
-              // Card(
-              //   margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
-              //   child: ListTile(
-              //     leading: Text('Jobs Done'),
-              //     title: Text('Jobs Done'),
-              //     trailing: FlatButton.icon(
-              //       icon: Icon(Icons.arrow_forward),
-              //       label: Text(''),
-              //       onPressed: () async {
-              //         // Navigator.of(context).push(MaterialPageRoute(
-              //         //     builder: (context) => JobRequestList(
-              //         //           user: widget.user,
-              //         //         )));
-              //       },
-              //     ),
-              //   ),
-              // ),
             ]);
           }
         });
   }
-
-  // Future getJobRequestNum(BuildContext context) async {
-  //   return await tradesmen
-  //       .doc(widget.user.uid)
-  //       .collection('job_requests')
-  //       .delete()
-  //       .then((value) => print("Doc Deleted"))
-  //       .whenComplete(
-  //           () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-  //               builder: (context) => TradesmanJobsDonePage(
-  //                     user: widget.user,
-  //                     jobsDoneAmount: widget.jobsDoneAmount,
-  //                   ))))
-  //       .catchError((error) => print("Failed to delete user: $error"));
-  // }
 
   Future<void> getJobRequestNum() async {
     // Get docs from collection reference
@@ -164,6 +156,24 @@ class _TradesmanHomePageListState extends State<TradesmanHomePageList> {
 
     tradesmen.doc(widget.user.uid).update({
       'ongoing_jobs_num': length,
+    });
+  }
+
+  Future<void> getJobsDoneNum() async {
+    // Get docs from collection reference
+    QuerySnapshot querySnapshot =
+        await tradesmen.doc(widget.user.uid).collection('jobs_done_list').get();
+
+    // Get data from docs and convert map to List
+    final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    //for a specific field
+    // final allData =
+    //         querySnapshot.docs.map((doc) => doc.get('fieldName')).toList();
+
+    var length = allData.length;
+
+    tradesmen.doc(widget.user.uid).update({
+      'overall_jobs_done_num': length,
     });
   }
 }

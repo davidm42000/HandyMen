@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:handy_men/models/tradesman_model.dart';
+import 'package:handy_men/screens/normal_user_job_done_info_page.dart';
 import 'package:handy_men/screens/normal_user_ongoing_job_info.dart';
 import 'package:handy_men/screens/tradesman_edit_profile_page.dart';
 import 'package:handy_men/screens/tradesman_job_request_info.dart';
@@ -16,17 +17,16 @@ import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:math';
 
-class NormalUserOnGoingJobsList extends StatefulWidget {
+class NormalUserJobsDoneList extends StatefulWidget {
   final User user;
-  const NormalUserOnGoingJobsList({required this.user, Key? key})
+  const NormalUserJobsDoneList({required this.user, Key? key})
       : super(key: key);
 
   @override
-  _NormalUserOnGoingJobsListState createState() =>
-      _NormalUserOnGoingJobsListState();
+  _NormalUserJobsDoneListState createState() => _NormalUserJobsDoneListState();
 }
 
-class _NormalUserOnGoingJobsListState extends State<NormalUserOnGoingJobsList> {
+class _NormalUserJobsDoneListState extends State<NormalUserJobsDoneList> {
   @override
   void initState() {
     super.initState();
@@ -35,14 +35,14 @@ class _NormalUserOnGoingJobsListState extends State<NormalUserOnGoingJobsList> {
   late Stream<QuerySnapshot> _ongoingJobStream = FirebaseFirestore.instance
       .collection('normalUsers')
       .doc(widget.user.uid)
-      .collection('ongoing_jobs')
+      .collection('jobs_done_list')
       .snapshots();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ongoing Jobs'),
+        title: Text('Jobs Done'),
         backgroundColor: Colors.orange,
         actions: <Widget>[
           FlatButton.icon(
@@ -80,7 +80,7 @@ class _NormalUserOnGoingJobsListState extends State<NormalUserOnGoingJobsList> {
                       label: Text(''),
                       onPressed: () async {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => NormalUserOngoingJobInfoPage(
+                            builder: (context) => NormalUserJobsDoneInfoPage(
                                   user: widget.user,
                                   docID: _id,
                                 )));

@@ -178,17 +178,21 @@ class _NormalUserProfilePageState extends State<NormalUserProfilePage> {
   }
 
   getLocation() async {
-    var _currentLocation = await location.getLocation();
-    print(_currentLocation.longitude);
-    double _lat = _currentLocation.latitude as double;
-    double _long = _currentLocation.longitude as double;
-    List<Placemark> placemarks = await placemarkFromCoordinates(_lat, _long);
-    Placemark place = placemarks[0];
-    setState(() {
-      _longitude = _currentLocation.longitude;
-      _latitude = _currentLocation.latitude;
-      _currentAddress =
-          "${place.locality}, ${place.name}, ${place.postalCode}, ${place.country}}";
-    });
+    try {
+      var _currentLocation = await location.getLocation();
+      print(_currentLocation.longitude);
+      double _lat = _currentLocation.latitude as double;
+      double _long = _currentLocation.longitude as double;
+      List<Placemark> placemarks = await placemarkFromCoordinates(_lat, _long);
+      Placemark place = placemarks[0];
+      setState(() {
+        _longitude = _currentLocation.longitude;
+        _latitude = _currentLocation.latitude;
+        _currentAddress =
+            "${place.locality}, ${place.name}, ${place.postalCode}, ${place.country}}";
+      });
+    } catch (c) {
+      print(c.toString());
+    }
   }
 }

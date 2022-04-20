@@ -18,11 +18,11 @@ import 'package:handy_men/templates/edit_profile_widget.dart';
 import 'package:handy_men/templates/text_field_widget.dart';
 import 'package:handy_men/templates/tradesmen_bottom_bar.dart';
 
-class TradesmanOnGoingJobInfoPage extends StatefulWidget {
+class TradesmanJobDoneInfoPage extends StatefulWidget {
   final User user;
   final String docID;
   final String tradesmanName;
-  const TradesmanOnGoingJobInfoPage({
+  const TradesmanJobDoneInfoPage({
     Key? key,
     required this.user,
     required this.docID,
@@ -30,12 +30,11 @@ class TradesmanOnGoingJobInfoPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _TradesmanOnGoingJobInfoPageState createState() =>
-      _TradesmanOnGoingJobInfoPageState();
+  _TradesmanJobDoneInfoPageState createState() =>
+      _TradesmanJobDoneInfoPageState();
 }
 
-class _TradesmanOnGoingJobInfoPageState
-    extends State<TradesmanOnGoingJobInfoPage> {
+class _TradesmanJobDoneInfoPageState extends State<TradesmanJobDoneInfoPage> {
   CollectionReference tradesmen =
       FirebaseFirestore.instance.collection('tradesmen');
 
@@ -46,7 +45,7 @@ class _TradesmanOnGoingJobInfoPageState
         backgroundColor: Colors.orange,
         elevation: 0,
         title: Text(
-          'Ongoing Job Info',
+          'Job Done Info',
         ),
         actions: <Widget>[],
       ),
@@ -54,7 +53,7 @@ class _TradesmanOnGoingJobInfoPageState
           stream: FirebaseFirestore.instance
               .collection('tradesmen')
               .doc(widget.user.uid)
-              .collection('ongoing_jobs')
+              .collection('jobs_done_list')
               .doc(widget.docID)
               .snapshots(),
           builder:
@@ -117,35 +116,6 @@ class _TradesmanOnGoingJobInfoPageState
                         style: TextStyle(fontSize: 16, height: 1.4),
                       ),
                       const SizedBox(height: 28),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      RaisedButton(
-                        color: Colors.green[400],
-                        child: Text(
-                          'Job Done',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        onPressed: () async {
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      TradesmanConfirmJobDonePage(
-                                        user: widget.user,
-                                        docID: widget.docID,
-                                        jobDescription:
-                                            userDocument['job_description'],
-                                        contactName:
-                                            userDocument['contact_name'],
-                                        contactEmail:
-                                            userDocument['contact_email'],
-                                        price: userDocument['price'],
-                                        tradesmanName: widget.tradesmanName,
-                                      )));
-                        },
-                      ),
                     ],
                   ),
                 ],
