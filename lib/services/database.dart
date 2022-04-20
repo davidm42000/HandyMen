@@ -22,6 +22,9 @@ class DatabaseService {
     return await normalUserCollection.doc(uid).set({
       'name': name,
       'address': address,
+      'quotes_num': 0,
+      'ongoing_jobs_num': 0,
+      'jobs_done_num': 0,
     });
   }
 
